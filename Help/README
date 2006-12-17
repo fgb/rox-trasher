@@ -1,0 +1,77 @@
+			ROX-Trasher
+			freedesktop-compliant trashcan
+			by Gabriel Rojas & Fernando Garcia Bermudez
+
+
+BRIEF
+~~~~~
+
+This is a modified "Trash" Rox-App originally written for Puppy Linux and adapted for non-distribution specific versions of Rox-Filer.
+Thanks to Dan Van Wormer for create the best trash app for this AMAZING file explorer.
+
+
+NEWS FOR THIS VERSION
+---------------------
+
+See "Changes".
+
+LICENSE
+-------
+
+GPL Version 2 (See "COPYING").
+
+REQUERIMENTS
+------------
+
+zenity >= 2.12.1 (or less?) ------> HELP! to replace it and eliminate dependencies.
+
+INSTALLATION
+------------
+
+Simply extract "ROX-Trasher-xx.tar.bz2".
+
+OPERATIONS
+----------
+
+When you first click on the trash icon it will create (if it does not already exist) the $XDG_CONFIG_HOME/ROX-Trasher  directory.
+
+Clicking on the desktop icon will open up the  $XDG_CONFIG_HOME/ROX-Trasher directory. 
+
+Once the Trash is open you can right click on a "Trashed" item and select "Restore". This will copy the original file or directory back to its original location. If another item with the same name is in that location it will prompt you before it over-writes it.
+
+Dragging and dropping a file or directory into the Trash desktop icon will move that file or directory into $XDG_CONFIG_HOME/ROX-Trasher
+
+Files and directories will have a unique number appended to the end of their names. This prevents new trashed items with the same names form over writing the old files.
+
+Right-clicking on a file or directory and selecting "Send To - Trash" will have the same effect as dragging and dropping the file on the desktop icon. 
+
+To restore all items, right click on the desktop icon and select "Restore all". The trashcan will restore all items stored in the trash directory and shows a info dialog with the names of the restored items.
+
+To empty the trash right click on the desktop icon and select "Empty Trashcan". Emptying the Trash will display all the files and directories in the trash and ask for confirmation.
+
+You will get a prompt if you send a symbolic link to the Trash. This is just to let you know that you are not sending the original item to the Trash.
+
+
+FUTURE
+------
+
+- The posibility to add in Rox-Filer to be oficial part of the program (Thomas Leonard & Team, READ THIS :P).
+- If the up item is posible, a item menu in Rox-Filer: "Send to Trash".
+
+CONDITIONS
+----------
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+CONTACT
+-------
+
+Help? Bugs? Suggestions? Opinions? ----------> achaw.ar@gmail.com
+
+
+TESTERS
+-------
+
+David Arthur (dave@kouya.ne)

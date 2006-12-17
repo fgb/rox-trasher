@@ -1,0 +1,79 @@
+
+Version 0.4
+-----------
+
+- Added FreeDesktop.org specifications.
+- Removed all sounds.
+- Now restore the panel shortcut if the trashed item has one.
+- Improved the pinboard restauration operation.
+- Removed the "Extra Icons" directory.
+- Improved the AppInfo files.
+- File type detection (based on the Dennis Thomas trashcan).
+
+
+Version 0.3
+-----------
+
+- Now restore the desktop shortcut if the trashed item has one.
+- Check if you own the item, if not, a warning message is displayed.
+- The status .DirIcon of the trashcan now is linked, not copied.
+
+
+Version 0.2
+-----------
+
+- Replaced trashcan_empty.png and trashcan_full.png with svg icons.
+- Optimize some code with restore all operation.
+- Added extra icons folder. (Inside of the appdir)
+
+
+Version 0.1.6
+-------------
+
+- Bugg fixed with test -sd. (Thanks José Silva)
+- Add two info messages if the trashcan is empty when you try to empty trashcan or restore all items.
+- Corrected a bug (created by me, sorry) with deletion of directories.
+- Some code improvement.
+- Now only copy the AppRun file from template directory. "trash.svg" and "AppInfo.xml" are linkeds (Thanks Fernando Garcia Bermudez)
+- Back to aplay command again.
+
+
+Version 0.1.5
+-------------
+
+- Bug fix release.
+- Some code improvement.
+- Corrected a conflict between "Restore all" and "Empty trashcan" operations.
+- Corrected a bug with hidden files, the "dot" caracter is replaced with "HIDDEN-" in the trashcan.
+
+
+Version 0.1.3
+-------------
+
+- Added "Restore all" operation.
+- Added a new sound for "delete" operation.
+- Improved some code about the sounds operations (Thanks Dan Van Wormer).
+- Improved the "Item info" operation, now info is stores in a single file "filename.trashinfo" (According to the FreeDesktop.org Trash specification).
+- Created two subdirectories in the removed file app directory, "files" where deleted item(s) is stored and "info" where the info file is stored (According to the FreeDesktop.org Trash specification).
+- Replaced "aplay" command with "play".
+
+
+Version 0.1.2
+-------------
+
+- Replaced "Original File Location" operation with "Item info", now showing the original location and the deletion date.
+- IMPORTANT! Corrected bug appearing if the path of the trashcan contained a folder with a space in its name.
+- Check if zenity is installed, if not prompt a info dialog with xmessage. If xmessage is not installed, an "echo" prompt is displayed.
+
+
+Version 0.1
+-----------
+
+- Replaced gxmessage/xmessage with zenity.
+- Removed the item "Quickly Empty the Trash" 
+- Added a new sound for "Restore item" operation.
+- Added a new confirmation dialog for remove operation.
+- Replaced "root" directory with $HOME to adapt to any user.
+- Replaced "/root/Choices/ROX-Filer/puppypin" by "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default" to adapt an any distribution, user, and actual Rox-Filer Versions.
+- Replaced play.tcl in "PlaySound" function by "aplay" (Should be "play" command?)
+- Corrected a bug with items with spaces in their names.

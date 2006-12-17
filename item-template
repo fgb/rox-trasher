@@ -1,0 +1,221 @@
+#!/bin/bash
+# January, 2006 - Gabriel Rojas - Fernando Garcia Bermudez
+
+# Determine the path to this application.
+APPDIR=`dirname "$0"`
+cd "$APPDIR"
+APPDIR="`pwd`"
+
+# Find the name of the file.
+function notAForwardSlash
+{
+fSlash=/
+   if [[ $1 != $fSlash ]]
+
+        then
+      return 0
+        else
+           return 1
+        fi
+}
+
+
+function getFileName
+{
+   STRING="$1"
+
+        LENGTH=${#STRING}
+
+   for ((n=0;n <= $LENGTH; n++))
+        do
+      CHAR=${STRING:$n:1}
+
+      if notAForwardSlash $CHAR
+      then
+         FileName=$FileName$CHAR
+
+      else
+         FileName=""
+      fi
+   done
+}
+
+# Get the name of the item in the Trash.
+getFileName "PATH"
+
+function RestoreItem
+{
+
+
+# Restore the item.
+mv "XDG/files/FILE" "PATH"
+
+# Get info from the pinboard shortcut file (if exists)
+if [ -e "$APPDIR/shortcut" ]; then
+x_ar=`awk '{print $2}' $APPDIR/shortcut | sed -e s/x=//g -e s/\"//g`
+y_ar=`awk '{print $3}' $APPDIR/shortcut | sed -e s/y=//g -e s/\"//`
+pth="PATH"
+label_desk=`grep "PATH" $APPDIR/shortcut | sed -e s/'label'// -e s/'"'// -e s/'">'// -e s/'<\/icon>'// -e s/'<icon x='// -e s/$x_ar// -e s/$y_ar// -e s/'y='// -e s/'="'// -e s/'"'// -e s/'"'// -e s/'"'// -e s^$pth^^`
+label_desk=`expr "$label_desk" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+
+# Restore the shortcut on the desktop
+rox --RPC << EOF
+<?xml version="1.0"?>
+<env:Envelope xmlns:env="http://www.w3.org/2001/12/soap-envelope">
+ <env:Body xmlns="http://rox.sourceforge.net/SOAP/ROX-Filer">
+  <PinboardAdd>
+   <Path>PATH</Path>
+<Label>$label_desk</Label>
+   <X>$x_ar</X>
+   <Y>$y_ar</Y>
+  </PinboardAdd>
+ </env:Body>
+</env:Envelope>
+EOF
+fi
+
+# Get info from the panel shortcut file (if exists)
+if [ -e "$APPDIR/shortcut_panel" ]; then
+
+side=`sed -e 2d "$APPDIR/shortcut_panel"`
+label=`sed -e 1d "$APPDIR/shortcut_panel"`
+# Restore the shortcut on the panel
+rox --RPC << EOF
+<?xml version="1.0"?>
+<env:Envelope xmlns:env="http://www.w3.org/2001/12/soap-envelope">
+ <env:Body xmlns="http://rox.sourceforge.net/SOAP/ROX-Filer">
+  <PanelAdd>
+<Side>$side</Side>
+<Label>$label</Label>
+   <Path>PATH</Path>
+  </PanelAdd>
+ </env:Body>
+</env:Envelope>
+EOF
+fi
+
+# See what is in the trash.
+stuff=`ls STORE`
+
+getFileName "$APPDIR"
+
+if [ "$FileName" = "$stuff" ]
+then
+
+ln -sf "TRASH/icons/trashcan_empty" "TRASH/.DirIcon"
+
+rox -x "TRASH"
+
+fi
+
+# Remove the restore-all file info.
+rm "TRASH/.restore-all/restore-FILE"
+
+# Delete this file and directory.
+rm -fr "$APPDIR"
+rm -fr "XDG/files/FILE"
+rm -fr "XDG/info/FILE.trashinfo"
+
+}
+
+# If they chose the "Restore" option.
+if [ "$1" = "-restore" ]
+then
+
+# See if there is already a file or folder of the same name in the same location.
+if [ -e "PATH" ]
+then
+
+zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "An item named PATH already exists.
+Do you want to overwite it?"
+
+# If they chose to cancel.
+[ $? -eq 0 ] || exit
+
+fi
+
+# Restore the item.
+RestoreItem
+
+elif [ "$1" = "-delete" ]
+then
+zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "Do you REALLY want to delete this item?"
+
+# If they chose to cancel.
+[ $? -eq 0 ] || exit
+
+# Remove the restore-all file info.
+rm "TRASH/.restore-all/restore-FILE"
+
+stuff=`ls STORE`
+
+getFileName "$APPDIR"
+
+if [ "$FileName" = "$stuff" ]
+then
+
+ln -sf "TRASH/icons/trashcan_empty" "TRASH/.DirIcon"
+
+rox -x "TRASH"
+
+fi
+
+# Delete this file and directory.
+rm -fr "$APPDIR"
+rm -fr "XDG/files/FILE"
+rm -fr "XDG/info/FILE.trashinfo"
+
+stuff=`ls STORE`
+
+getFileName "$APPDIR"
+
+if [ "$FileName" = "$stuff" ]
+then
+
+ln -sf "TRASH/icons/trashcan_empty" "TRASH/.DirIcon"
+
+rox -x "TRASH"
+
+fi
+
+else
+
+# Check to see if they clicked on the application or dropped a file or directory on the icon.
+if [ "$*" = "" ]
+then
+
+# If they just clicked on the icon.
+
+# Write the confirmation message.
+zenity --window-icon="TRASH/icons/trashcan_empty" --title "Confirm Action" --question --text "Do you want to restore the item PATH?"
+
+# If they chose to cancel.
+[ $? -eq 0 ] || exit
+
+# See if there is already a file or folder of the same name in the same location.
+if [ -e "PATH" ]
+then
+
+zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "An item named PATH already exists.
+Do you want to overwite it?"
+
+# If they chose to cancel.
+[ $? -eq 0 ] || exit
+
+fi
+
+# Restore the item.
+RestoreItem
+
+
+else
+
+# If they dropped something to the icon.
+
+# Write the error message.
+
+zenity --window-icon="TRASH/icons/trashcan_empty" --error --text="You can't drop items onto things that are in the Trash."
+
+fi
+
+fi

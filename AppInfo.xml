@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<AppInfo>
+  <Summary>ROX-Trasher</Summary>
+  <About>
+    <Purpose>FreeDesktop.org compilant trashcan for Rox-Filer</Purpose>
+    <License>GPL: http://www.gnu.org/licenses/gpl.txt</License>
+    <Version>0.5 - January, 2006</Version>
+    <Authors>Gabriel Rojas - Fernando Garcia Bermudez</Authors>
+    <Homepage>http://proyectar.movrev.com</Homepage>
+  </About>
+  <AppMenu>
+        <Item label="Restore All" option="-restore-all"/>
+        <Item label="Empty Trashcan" option="-empty"/>
+  </AppMenu>
+</AppInfo>
