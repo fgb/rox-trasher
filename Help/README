@@ -1,10 +1,10 @@
 			ROX-Trasher
-			freedesktop-compliant trashcan
+			freedesktop-compliant trashcan for ROX-Filer
 			by Gabriel Rojas & Fernando Garcia Bermudez
 
 
 BRIEF
-~~~~~
+-----
 
 This is a modified "Trash" Rox-App originally written for Puppy Linux and adapted for non-distribution specific versions of Rox-Filer.
 Thanks to Dan Van Wormer for create the best trash app for this AMAZING file explorer.
@@ -37,7 +37,7 @@ When you first click on the trash icon it will create (if it does not already ex
 
 Clicking on the desktop icon will open up the  $XDG_CONFIG_HOME/ROX-Trasher directory. 
 
-Once the Trash is open you can right click on a "Trashed" item and select "Restore". This will copy the original file or directory back to its original location. If another item with the same name is in that location it will prompt you before it over-writes it.
+Once the Trash is open you can right click on a "Trashed" item and select "Restore". This will copy the original file or directory back to its original location. If another item with the same name is in that location it will prompt you before it over-writes it. Also, you can choose delete the item, but USE THE CONTEXTUAL MENU OF THE APP, NOT THE DELETE OPERATION OF ROX-FILER!!!.
 
 Dragging and dropping a file or directory into the Trash desktop icon will move that file or directory into $XDG_CONFIG_HOME/ROX-Trasher
 
@@ -45,7 +45,7 @@ Files and directories will have a unique number appended to the end of their nam
 
 Right-clicking on a file or directory and selecting "Send To - Trash" will have the same effect as dragging and dropping the file on the desktop icon. 
 
-To restore all items, right click on the desktop icon and select "Restore all". The trashcan will restore all items stored in the trash directory and shows a info dialog with the names of the restored items.
+To restore all items, right click on the desktop icon and select "Restore all". The trashcan will restore all items stored in the trash directory and shows a info dialog with the names of the restored items. If the item have a pinboard or panel shortcut it will be restored too.
 
 To empty the trash right click on the desktop icon and select "Empty Trashcan". Emptying the Trash will display all the files and directories in the trash and ask for confirmation.
 
