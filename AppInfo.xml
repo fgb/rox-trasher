@@ -1,15 +1,28 @@
 <?xml version="1.0"?>
 <AppInfo>
   <Summary>ROX-Trasher</Summary>
-  <About>
+  <About xml:lang="en">
     <Purpose>FreeDesktop.org compilant trashcan for Rox-Filer</Purpose>
     <License>GPL: http://www.gnu.org/licenses/gpl.txt</License>
     <Version>0.4 - December, 2006</Version>
     <Authors>Gabriel Rojas - Fernando Garcia Bermudez</Authors>
-    <Homepage>http://proyectar.movrev.com</Homepage>
+    <Homepage>http://code.google.com/p/rox-trasher/</Homepage>
+  </About>
+  <About xml:lang="es">
+    <Purpose label="Proposito">Papelera de reciclaje</Purpose>
+    <License label="Licencia">GPL: http://www.gnu.org/licenses/gpl.txt</License>
+    <Version>0.4 - Diciembre, 2006</Version>
+    <Authors label="Autores">Gabriel Rojas - Fernando Garcia Bermudez</Authors>
+    <Homepage label="Pagina Web">http://code.google.com/p/rox-trasher/</Homepage>
   </About>
   <AppMenu>
-        <Item label="Restore All" option="-restore-all"/>
-        <Item label="Empty Trashcan" option="-empty"/>
+        <Item option="-restore-all">
+<Label xml:lang="en">Restore All</Label>
+<Label xml:lang="es">Restaurar todo</Label>
+</Item>
+        <Item option="-empty">
+<Label xml:lang="en">Empty Trashcan</Label>
+<Label xml:lang="es">Vaciar Papelera</Label>
+</Item>
   </AppMenu>
 </AppInfo>
