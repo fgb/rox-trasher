@@ -1,20 +1,92 @@
 #!/bin/bash
 # December, 2006 - Gabriel Rojas - Fernando Garcia Bermudez
 
-
 # Determine the path to this application.
 APPDIR=`dirname "$0"`
 cd "$APPDIR"
 APPDIR="`pwd`"
 actual=`date +"%Y-%m-%dT%T"`
 
+#################################################
+#################################################
+#	TRANSLATIONS
+		###### Default = English #####
+		txt1="Zenity is not installed, you need zenity >= 2.12.1"
+		txt2="HIDDEN-"
+		txt3="The trashcan is already empty!"
+                txt4="Empty the Trashcan"
+                txt5="Confirm Delete:"
+                txt6="The trashcan is empty!"
+                txt7="The next item(s) are restored:"
+                txt8="Move to trash"
+                txt9="Delete this item(s)?"
+                txt10="You can't move"
+                txt11="to the Trash because of insufficient permissions."
+                txt12="Do you still want to delete it?" 
+                txt13="The item"
+                txt14="is a Symbolic Link.
+This will move the Symbolic Link to the Trash and leave the original item  alone.
+Do you want to continue?"
+                txt15="There is one or more Desktop shortcuts pointing to"
+                txt16="This will move the original item to the Trash and remove the shortcut(s) from the Desktop.
+Do you want to continue?"
+                txt17="There is one or more Panel shortcuts pointing to"
+                txt18="This will move the original item to the Trash and remove the shortcut(s) from the Panel.
+Do you want to continue?"
+                appinfo1="Deleted on:"
+                appinfo2="Origin:"
+                appinfo3="Type"
+                appinfo4="Deleted"
+                appinfo5="Origin"
+                appinfo6="Restore"
+                appinfo7="Delete"
+
+	case $LANG in
+		######## Español ########
+		es* )
+                    # AppRun strings
+		txt1="Zenity no esta instalado, necesitas >= 2.12.1"
+		txt2="OCULTO-"
+		txt3="La papelera ya esta vacia!"
+                txt4="Vaciar la Papelera"
+                txt5="Confirmar eliminacion:"
+                txt6="La papelera esta vacia!"
+                txt7="Los siguientes items fueron restaurados:"
+                txt8="Mover a Papelera"
+                txt9="Borrar estos elementos?"
+                txt10="No puedes mover"
+                txt11="a la papelera por permisos insuficientes."
+                txt12="Todavia quieres eliminarlos?" 
+                txt13="El item"
+                txt14="es un enlace simbolico.
+La papelera movera el enlace y dejara el elemento.
+Deseas continuar?"
+                txt15="Hay uno o mas accesos de escritorio apuntando a"
+                txt16="La papelera movera el item y el acceso del pinboard.
+Deseas continuar?"
+                txt17="Hay uno o mas accesos de panel apuntando a"
+                txt18="La papelera movera el item y el acceso del panel.
+Deseas continuar?"
+                appinfo1="Borrado el:"
+                appinfo2="Origen:"
+                appinfo3="Tipo"
+                appinfo4="Eliminacion"
+                appinfo5="Origen"
+                appinfo6="Restaurar"
+                appinfo7="Borrar"
+	esac
+
+### End of Translations ###
+###########################
+###########################
+
 
 # Check if zenity is installed.
 if !which zenity &> /dev/null; then
 if which xmessage &> /dev/null; then
-xmessage -buttons "Ok" -center "Zenity is not installed, you need zenity >= 2.12.1"
+xmessage -buttons "Ok" -center "$txt1"
 else
-echo "Zenity is not installed, you need zenity >= 2.12.1"
+echo "$txt1"
 fi
 exit
 fi
@@ -92,7 +164,7 @@ getFileName "$m"
 
 
 # Add a suffix if the item is a hidden file/directory
-FileName=${FileName/#./HIDDEN-}
+FileName=${FileName/#./$txt2}
 
 
 
@@ -114,14 +186,10 @@ DeletionDate=$actual" > "$trash/info/$FileName-$$.trashinfo"
 mv "$m" "$trash/files/$FileName-$$"
 
 # Set the item type
-if [ -d "$trash/files/$FileName-$$" ]; then
   if [ -x "$trash/files/$FileName-$$/AppRun" ]; then
-    filetype="Application"
+    filetype="rox/application"
   else
-    filetype="Directory"
-  fi
-else
-  filetype="File"
+filetype=`rox -m "$trash/files/$FileName-$$"`
 fi
 
 # Link the icon for the trashed item.
@@ -130,15 +198,15 @@ ln -sf "$APPDIR/icons/trash" "$interface/$FileName-$$/.DirIcon"
 # Create the AppInfo file
 echo "<?xml version=\"1.0\"?>
 <AppInfo>
-  <Summary>$filetype - Deleted on: $actual - Origin: $m</Summary>
+  <Summary>$filetype - $appinfo1 $actual - $appinfo2 $m</Summary>
   <About>
-    <Type>$filetype</Type>
-    <Deleted>$actual</Deleted>
-    <Origin>$m</Origin>
+    <$appinfo3>$filetype</$appinfo3>
+    <$appinfo4>$actual</$appinfo4>
+    <$appinfo5>$m</$appinfo5>
   </About>
    <AppMenu>
-    <Item label=\"Restore\" option=\"-restore\"/>
-    <Item label=\"Delete\" option=\"-delete\"/>
+    <Item label=\"$appinfo6\" option=\"-restore\"/>
+    <Item label=\"$appinfo7\" option=\"-delete\"/>
    </AppMenu>
 </AppInfo>" > "$interface/$FileName-$$/AppInfo.xml"
 
@@ -216,10 +284,10 @@ then
  stuff=`ls $interface`
 
 if [ "$stuff" = "" ]; then
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --error --text "The trashcan is already empty!"
+zenity --window-icon="$APPDIR/icons/trashcan_empty" --error --text "$txt3"
 else
  # Write the confirmation message.
-zenity --window-icon="$APPDIR/icons/trashcan_empty"  --title "Empty the Trashcan" --question --text "Confirm Delete: 
+zenity --window-icon="$APPDIR/icons/trashcan_empty"  --title "$txt4" --question --text "$txt5 
 $stuff"
 
   # If they chose to cancel.
@@ -242,7 +310,7 @@ then
  stuff=`ls $interface`
 
 if [ "$stuff" = "" ]; then
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --error --text "The trashcan is empty!"
+zenity --window-icon="$APPDIR/icons/trashcan_empty" --error --text "$txt6"
 else
 
 cd "$APPDIR/.restore-all"
@@ -252,7 +320,7 @@ do
 `./*`
 done
 
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --info --text "The next item(s) are restored:
+zenity --window-icon="$APPDIR/icons/trashcan_empty" --info --text "$txt7
 $stuff"
 
 fi
@@ -271,7 +339,7 @@ else
 
 
  # If they sent something to the trash can.
-zenity --title="Move to trash" --window-icon="$APPDIR/icons/trashcan_empty" --question --text "Delete this item(s)?"
+zenity --title="$txt8" --window-icon="$APPDIR/icons/trashcan_empty" --question --text "$txt9"
 if [ "$?" = "0" ]
  then
 
@@ -280,13 +348,14 @@ if [ "$?" = "0" ]
 
             # Check if the item can be deleted (write access).
             if [ ! -w "$m" ]; then 
-                zenity --error --window-icon="$APPDIR/icons/trashcan_empty" --text "You can't move $m to the Trash because of insufficient permissions."
+                zenity --error --window-icon="$APPDIR/icons/trashcan_empty" --text "$txt10 $m $txt11"
                 continue
             fi
             
             # Check if the item can be trashed (read access).
             if [ ! -r "$m" ]; then 
-                zenity --warning --window-icon="$APPDIR/icons/trashcan_empty" --text "You can't move $m to the Trash because of insufficient permissions. Do you still want to delete it?"
+                zenity --warning --window-icon="$APPDIR/icons/trashcan_empty" --text "$txt10 $m $txt11 
+$txt12"
                 [ $? -eq 0 ] || continue
             fi
 
@@ -295,9 +364,7 @@ if [ "$?" = "0" ]
   then
 
    # Write the confirmation message.
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --warning --text "The item $m is a Symbolic Link.
-This will move the Symbolic Link to the Trash and leave the original item  alone.
-Do you want to continue?"
+zenity --window-icon="$APPDIR/icons/trashcan_empty" --warning --text "$txt13 $m $txt14"
 
   # If they chose to cancel.
   [ $? -eq 0 ] || exit
@@ -312,9 +379,8 @@ if test -e $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default; then
  then
 
   # Write the confirmation message.
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --warning --text "There is one or more Desktop shortcuts pointing to $m
-This will move the original item to the Trash and remove the shortcut(s) from the Desktop.
-Do you want to continue?"
+zenity --window-icon="$APPDIR/icons/trashcan_empty" --warning --text "$txt15 $m
+$txt16"
 
   # If they chose to cancel.
   [ $? -eq 0 ] || exit
@@ -331,7 +397,7 @@ getFileName "$m"
 
 
 # Add a suffix if the item is a hidden file/directory
-FileName=${FileName/#./HIDDEN-}
+FileName=${FileName/#./$txt2}
 
 # Create directories for the trashed item.
 if test ! -e $interface/$FileName-$$; then
@@ -375,9 +441,8 @@ if test -e $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default; then
  then
 
   # Write the confirmation message.
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --warning --text "There is one or more Panel shortcuts pointing to $m
-This will move the original item to the Trash and remove the shortcut(s) from the Panel.
-Do you want to continue?"
+zenity --window-icon="$APPDIR/icons/trashcan_empty" --warning --text "$txt17 $m
+$txt18"
 
   # If they chose to cancel.
   [ $? -eq 0 ] || exit
@@ -394,7 +459,7 @@ getFileName "$m"
 
 
 # Add a suffix if the item is a hidden file/directory
-FileName=${FileName/#./HIDDEN-}
+FileName=${FileName/#./$txt2}
 
 # Create directories for the trashed item.
 if test ! -e $interface/$FileName-$$; then

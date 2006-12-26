@@ -1,13 +1,16 @@
 			ROX-Trasher
-			freedesktop-compliant trashcan for ROX-Filer
+			Trashcan application for the ROX Filer and Desktop
 			by Gabriel Rojas & Fernando Garcia Bermudez
 
 
 BRIEF
 -----
 
-This is a modified "Trash" Rox-App originally written for Puppy Linux and adapted for non-distribution specific versions of Rox-Filer.
-Thanks to Dan Van Wormer for create the best trash app for this AMAZING file explorer.
+A modified version of the trashcan application written for Puppy Linux by Dan Van Wormer. It was adapted to be non-distribution and non-user specific and updated to the latest version of ROX-Filer.
+
+It is undergoing substantial development in order to make it adhere to the freedesktop.org 'Desktop Trash Can Specification' and related specifications.
+
+Apart from the common requirements of this specification, we are working on an undo function to ease the recovery of mistakingly trashed items and towards a better integration into ROX filer and its desktop (hopefully, getting it included into the ROX trunk in the near future).
 
 
 NEWS FOR THIS VERSION
@@ -23,7 +26,7 @@ GPL Version 2 (See "COPYING").
 REQUERIMENTS
 ------------
 
-zenity >= 2.12.1 (or less?) ------> HELP! to replace it and eliminate dependencies.
+zenity >= 2.12.1
 
 INSTALLATION
 ------------
@@ -52,6 +55,13 @@ To empty the trash right click on the desktop icon and select "Empty Trashcan". 
 You will get a prompt if you send a symbolic link to the Trash. This is just to let you know that you are not sending the original item to the Trash.
 
 
+TRANSLATIONS HOW-TO
+-------------------
+
+Check the "TRANSLATIONS" section in the AppRund and item-template files, redefine the variable strings, and add in the case loop the generic $LANG code (for example, for es_ES: es* ). You can also have to translate the AppInfo.xml file in the $APPDIR directory, check the Chapter 17 in the ROX-Filer manual.
+If you add some translations for your own, please send us with the proper $LANG code and the translated AppInfo file to add to the next version of the app.
+
+
 FUTURE
 ------
 
@@ -68,7 +78,7 @@ You should have received a copy of the GNU General Public License along with thi
 CONTACT
 -------
 
-Help? Bugs? Suggestions? Opinions? ----------> achaw.ar@gmail.com
+Help? Bugs? Suggestions? Opinions? ----------> achaw_movrev@gmail.com
 
 
 TESTERS

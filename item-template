@@ -6,6 +6,31 @@ APPDIR=`dirname "$0"`
 cd "$APPDIR"
 APPDIR="`pwd`"
 
+#################################################
+#	TRANSLATIONS
+		###### Default = English #####
+                txt21="An item named PATH already exists.
+Do you want to overwite it?"
+                txt22="Do you REALLY want to delete this item?"
+                txt23="Do you want to restore the item PATH?"
+                txt24="You can't drop items onto things that are in the Trash."
+                txt25="Confirm action"
+
+	case $LANG in
+		######## Español ########
+		es* )
+                txt21="Un item llamado PATH ya existe.
+Deseas sobreescribirlo?"
+                txt22="REALMENTE deseas eliminar este item?"
+                txt23="Quieres restaurar el item PATH?"
+                txt24="No puedes arrastrar elementos sobre items que se encuentran en la papelera."
+                txt25="Confirmar accion"
+	esac
+### End of Translations ###
+###########################
+
+
+
 # Find the name of the file.
 function notAForwardSlash
 {
@@ -126,8 +151,7 @@ then
 if [ -e "PATH" ]
 then
 
-zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "An item named PATH already exists.
-Do you want to overwite it?"
+zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "$txt21"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -139,7 +163,7 @@ RestoreItem
 
 elif [ "$1" = "-delete" ]
 then
-zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "Do you REALLY want to delete this item?"
+zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "$txt22"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -187,7 +211,7 @@ then
 # If they just clicked on the icon.
 
 # Write the confirmation message.
-zenity --window-icon="TRASH/icons/trashcan_empty" --title "Confirm Action" --question --text "Do you want to restore the item PATH?"
+zenity --window-icon="TRASH/icons/trashcan_empty" --title "$txt25" --question --text "$txt23"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -196,8 +220,7 @@ zenity --window-icon="TRASH/icons/trashcan_empty" --title "Confirm Action" --que
 if [ -e "PATH" ]
 then
 
-zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "An item named PATH already exists.
-Do you want to overwite it?"
+zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "$txt21"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -214,7 +237,7 @@ else
 
 # Write the error message.
 
-zenity --window-icon="TRASH/icons/trashcan_empty" --error --text="You can't drop items onto things that are in the Trash."
+zenity --window-icon="TRASH/icons/trashcan_empty" --error --text="$txt24"
 
 fi
 

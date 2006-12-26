@@ -1,4 +1,11 @@
 
+Version 0.5
+-----------
+
+- Better file type detection, based on rox mime-type detection.
+- Added Spanish translations (Translations Work in Progress).
+
+
 Version 0.4
 -----------
 
