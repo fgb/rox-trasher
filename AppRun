@@ -53,7 +53,7 @@ Do you want to continue?"
                 txt6="La papelera esta vacia!"
                 txt7="Los siguientes items fueron restaurados:"
                 txt8="Mover a Papelera"
-                txt9="Borrar estos elementos?"
+                txt9="Borrar estos items?"
                 txt10="No puedes mover"
                 txt11="a la papelera por permisos insuficientes."
                 txt12="Todavia quieres eliminarlos?" 
@@ -80,6 +80,62 @@ Deseas continuar?"
 ###########################
 ###########################
 
+
+####### Set Trash Icon ###########
+##################################
+
+if test -e "$HOME/.gtkrc-2.0"; then
+theme=`grep gtk-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+if  [ "$theme" = "" ];then
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+else
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+
+if  [ "$XDG_DATA_DIRS" = "" ]; then
+    XDG_DATA_DIRS="/usr/share"
+fi
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/gnome-fs-trash-empty.svg"
+full_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/gnome-fs-trash-full.svg"
+
+else
+
+empty_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-trash-empty.svg"
+full_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-trash-full.svg"
+
+fi
+
+else
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/gnome-fs-trash-empty.png"
+full_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/gnome-fs-trash-full.png"
+
+else
+
+empty_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-trash-empty.png"
+full_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-trash-full.png"
+
+fi
+
+fi
+
+########### End of Set Trash icon ##################
+####################################################
 
 # Check if zenity is installed.
 if !which zenity &> /dev/null; then
@@ -115,13 +171,13 @@ fi
 
 function EmptyIcon
 {
-ln -sf "$APPDIR/icons/trashcan_empty" "$APPDIR/.DirIcon"
+ln -sf "$empty_icon" "$APPDIR/.DirIcon"
 rox -x "$APPDIR"
 }
 
 function FullIcon
 {
-ln -sf "$APPDIR/icons/trashcan_full" "$APPDIR/.DirIcon"
+ln -sf "$full_icon" "$APPDIR/.DirIcon"
 rox -x "$APPDIR"
 }
 
@@ -188,12 +244,172 @@ mv "$m" "$trash/files/$FileName-$$"
 # Set the item type
   if [ -x "$trash/files/$FileName-$$/AppRun" ]; then
     filetype="rox/application"
+echo "$filetype" > "$interface/$FileName-$$/type"
   else
 filetype=`rox -m "$trash/files/$FileName-$$"`
+echo "$filetype" > "$interface/$FileName-$$/type"
 fi
 
+
+filetype=`sed -e s#/#-## "$interface/$FileName-$$/type"`
+
+#### Set Trashed icon ####
+##########################
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/gnome-mime-$filetype.svg"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/mime-$filetype.svg"
+
+fi
+
+else
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/gnome-mime-$filetype.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/mime-$filetype.png"
+
+fi
+
+fi
+
+if [ -d "$trash/files/$FileName-$$" ];then
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/gnome-fs-directory.svg"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-directory.svg"
+
+fi
+
+else
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/gnome-fs-directory.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-directory.png"
+
+fi
+
+fi
+fi
+
+  if [ -x "$trash/files/$FileName-$$/AppRun" ]; then
+if [ -e "$trash/files/$FileName-$$/.DirIcon" ]; then
+trash_icon="$trash/files/$FileName-$$/.DirIcon"
+else
+trash_icon="/usr/lib/rox/ROX-Filer/images/application.png"
+fi
+fi
+
+if test ! -e "$trash_icon"; then
+
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/gnome-mime-$filetype.svg"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/mime-$filetype.svg"
+
+fi
+
+else
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/gnome-mime-$filetype.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/mime-$filetype.png"
+
+fi
+fi
+fi
+
+if test ! -e "$trash_icon"; then
+if test -e "$HOME/.gtkrc-2.0"; then
+theme=`grep gtk-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+if  [ "$theme" = "" ];then
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+else
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/gnome-fs-regular.svg"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-regular.svg"
+
+fi
+
+else
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/gnome-fs-regular.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-regular.png"
+
+fi
+fi
+fi
+
+#### End of Set Trashed icon ####
+#################################
+
 # Link the icon for the trashed item.
-ln -sf "$APPDIR/icons/trash" "$interface/$FileName-$$/.DirIcon"
+ln -sf "$trash_icon" "$interface/$FileName-$$/.DirIcon"
 
 # Create the AppInfo file
 echo "<?xml version=\"1.0\"?>
@@ -212,11 +428,13 @@ echo "<?xml version=\"1.0\"?>
 
 
 # Write the new AppRun file with some variables
-gawk -v var="PATH" -v name="$m" -v trash="$APPDIR" -v xdg="$trash" -v store="$interface" -v file="$FileName-$$" '{sub(var, name)}
+gawk -v var="PATH" -v name="$m" -v trash="$APPDIR" -v xdg="$trash" -v store="$interface" -v file="$FileName-$$" -v e_icon="$empty_icon" -v f_icon="$full_icon"   '{sub(var, name)}
 {sub("TRASH", trash)}
 {sub("XDG", xdg)}
 {sub("STORE", store)}
 {sub("FILE", file)}
+{sub("E_ICON", e_icon)}
+{sub("F_ICON", f_icon)}
 {sub("TRASH", trash); print}' "$APPDIR/item-template" > "$interface/$FileName-$$/AppRun"
 
 # Write the restore-all info
@@ -284,10 +502,10 @@ then
  stuff=`ls $interface`
 
 if [ "$stuff" = "" ]; then
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --error --text "$txt3"
+zenity --window-icon="$empty_icon" --error --text "$txt3"
 else
  # Write the confirmation message.
-zenity --window-icon="$APPDIR/icons/trashcan_empty"  --title "$txt4" --question --text "$txt5 
+zenity --window-icon="$empty_icon"  --title "$txt4" --question --text "$txt5 
 $stuff"
 
   # If they chose to cancel.
@@ -310,7 +528,7 @@ then
  stuff=`ls $interface`
 
 if [ "$stuff" = "" ]; then
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --error --text "$txt6"
+zenity --window-icon="$empty_icon" --error --text "$txt6"
 else
 
 cd "$APPDIR/.restore-all"
@@ -320,7 +538,7 @@ do
 `./*`
 done
 
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --info --text "$txt7
+zenity --window-icon="$empty_icon" --info --text "$txt7
 $stuff"
 
 fi
@@ -339,7 +557,7 @@ else
 
 
  # If they sent something to the trash can.
-zenity --title="$txt8" --window-icon="$APPDIR/icons/trashcan_empty" --question --text "$txt9"
+zenity --title="$txt8" --window-icon="$empty_icon" --question --text "$txt9"
 if [ "$?" = "0" ]
  then
 
@@ -348,13 +566,13 @@ if [ "$?" = "0" ]
 
             # Check if the item can be deleted (write access).
             if [ ! -w "$m" ]; then 
-                zenity --error --window-icon="$APPDIR/icons/trashcan_empty" --text "$txt10 $m $txt11"
+                zenity --error --window-icon="$empty_icon" --text "$txt10 $m $txt11"
                 continue
             fi
             
             # Check if the item can be trashed (read access).
             if [ ! -r "$m" ]; then 
-                zenity --warning --window-icon="$APPDIR/icons/trashcan_empty" --text "$txt10 $m $txt11 
+                zenity --warning --window-icon="$empty_icon" --text "$txt10 $m $txt11 
 $txt12"
                 [ $? -eq 0 ] || continue
             fi
@@ -364,7 +582,7 @@ $txt12"
   then
 
    # Write the confirmation message.
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --warning --text "$txt13 $m $txt14"
+zenity --window-icon="$empty_icon" --warning --text "$txt13 $m $txt14"
 
   # If they chose to cancel.
   [ $? -eq 0 ] || exit
@@ -379,7 +597,7 @@ if test -e $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default; then
  then
 
   # Write the confirmation message.
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --warning --text "$txt15 $m
+zenity --window-icon="$empty_icon" --warning --text "$txt15 $m
 $txt16"
 
   # If they chose to cancel.
@@ -441,7 +659,7 @@ if test -e $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default; then
  then
 
   # Write the confirmation message.
-zenity --window-icon="$APPDIR/icons/trashcan_empty" --warning --text "$txt17 $m
+zenity --window-icon="$empty_icon" --warning --text "$txt17 $m
 $txt18"
 
   # If they chose to cancel.

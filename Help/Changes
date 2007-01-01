@@ -1,9 +1,10 @@
 
-Version 0.5
------------
+Version 0.5-dev
+---------------
 
 - Better file type detection, based on rox mime-type detection.
 - Added Spanish translations (Translations Work in Progress).
+- Added suport to use the icon of the current theme used (WORK IN PROGRESS) and removed the icons subfolder.
 
 
 Version 0.4

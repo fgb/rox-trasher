@@ -127,7 +127,7 @@ getFileName "$APPDIR"
 if [ "$FileName" = "$stuff" ]
 then
 
-ln -sf "TRASH/icons/trashcan_empty" "TRASH/.DirIcon"
+ln -sf "E_ICON" "TRASH/.DirIcon"
 
 rox -x "TRASH"
 
@@ -151,7 +151,7 @@ then
 if [ -e "PATH" ]
 then
 
-zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "$txt21"
+zenity --window-icon="E_ICON" --warning --text "$txt21"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -163,7 +163,7 @@ RestoreItem
 
 elif [ "$1" = "-delete" ]
 then
-zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "$txt22"
+zenity --window-icon="E_ICON" --warning --text "$txt22"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -178,7 +178,7 @@ getFileName "$APPDIR"
 if [ "$FileName" = "$stuff" ]
 then
 
-ln -sf "TRASH/icons/trashcan_empty" "TRASH/.DirIcon"
+ln -sf "E_ICON" "TRASH/.DirIcon"
 
 rox -x "TRASH"
 
@@ -196,7 +196,7 @@ getFileName "$APPDIR"
 if [ "$FileName" = "$stuff" ]
 then
 
-ln -sf "TRASH/icons/trashcan_empty" "TRASH/.DirIcon"
+ln -sf "E_ICON" "TRASH/.DirIcon"
 
 rox -x "TRASH"
 
@@ -211,7 +211,7 @@ then
 # If they just clicked on the icon.
 
 # Write the confirmation message.
-zenity --window-icon="TRASH/icons/trashcan_empty" --title "$txt25" --question --text "$txt23"
+zenity --window-icon="E_ICON" --title "$txt25" --question --text "$txt23"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -220,7 +220,7 @@ zenity --window-icon="TRASH/icons/trashcan_empty" --title "$txt25" --question --
 if [ -e "PATH" ]
 then
 
-zenity --window-icon="TRASH/icons/trashcan_empty" --warning --text "$txt21"
+zenity --window-icon="E_ICON" --warning --text "$txt21"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -237,7 +237,7 @@ else
 
 # Write the error message.
 
-zenity --window-icon="TRASH/icons/trashcan_empty" --error --text="$txt24"
+zenity --window-icon="E_ICON" --error --text="$txt24"
 
 fi
 
