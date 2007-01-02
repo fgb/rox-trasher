@@ -21,7 +21,7 @@ See "Changes".
 LICENSE
 -------
 
-GPL Version 2 (See "COPYING").
+GPL (See "COPYING").
 
 REQUERIMENTS
 ------------
@@ -65,7 +65,7 @@ If you add some translations for your own, please send us with the proper $LANG 
 FUTURE
 ------
 
-- The posibility to add in Rox-Filer to be oficial part of the program (Thomas Leonard & Team, READ THIS :P).
+- The posibility to add in Rox-Filer to be oficial part of the program.
 - If the up item is posible, a item menu in Rox-Filer: "Send to Trash".
 
 CONDITIONS

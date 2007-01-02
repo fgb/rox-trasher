@@ -134,6 +134,43 @@ fi
 
 fi
 
+if [ ! -e "$empty_icon" ] || [ ! -e "$full_icon" ]; then
+
+if test -e "$XDG_DATA_DIRS/icons/hicolor/scalable"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems/gnome-fs-trash-empty.svg"
+full_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems/gnome-fs-trash-full.svg"
+
+else
+
+empty_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems/fs-trash-empty.svg"
+full_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems/fs-trash-full.svg"
+
+fi
+
+else
+
+gnome=`find "$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/gnome-fs-trash-empty.png"
+full_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/gnome-fs-trash-full.png"
+
+else
+
+empty_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/fs-trash-empty.png"
+full_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/fs-trash-full.png"
+
+fi
+
+fi
+fi
+
 ########### End of Set Trash icon ##################
 ####################################################
 
@@ -251,10 +288,17 @@ echo "$filetype" > "$interface/$FileName-$$/type"
 fi
 
 
-filetype=`sed -e s#/#-## "$interface/$FileName-$$/type"`
+filetype=`sed -e s#/#_## "$interface/$FileName-$$/type"`
+
+
 
 #### Set Trashed icon ####
 ##########################
+
+trash_icon=`find "$HOME/.config/rox.sourceforge.net/MIME-icons" -name $filetype.png`
+
+if [ "$trash_icon" = "" ];then 
+filetype=`sed -e s#/#-## "$interface/$FileName-$$/type"`
 
 if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes"; then
 
@@ -288,6 +332,12 @@ fi
 
 if [ -d "$trash/files/$FileName-$$" ];then
 
+if [ -e "$trash/files/$FileName-$$/.DirIcon" ];then
+
+trash_icon="$trash/files/$FileName-$$/.DirIcon"
+
+else
+
 if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems"; then
 
 gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems" -name gnome*`
@@ -316,6 +366,7 @@ trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-directory.png"
 
 fi
 
+fi
 fi
 fi
 
@@ -405,12 +456,49 @@ fi
 fi
 fi
 
+
+fi
+
+if test ! -e "$trash_icon"; then
+
+
+if test -e "$XDG_DATA_DIRS/icons/hicolor/scalable/mimetypes"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/hicolor/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/mimetypes/gnome-mime-$filetype.svg"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/mimetypes/mime-$filetype.svg"
+
+fi
+
+else
+
+gnome=`find "$XDG_DATA_DIRS/icons/hicolor/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/mimetypes/gnome-mime-$filetype.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/mimetypes/mime-$filetype.png"
+
+
+fi
+fi
+fi
 #### End of Set Trashed icon ####
 #################################
 
 # Link the icon for the trashed item.
 ln -sf "$trash_icon" "$interface/$FileName-$$/.DirIcon"
 
+filetype=`sed -e s#/#-## "$interface/$FileName-$$/type"`
 # Create the AppInfo file
 echo "<?xml version=\"1.0\"?>
 <AppInfo>
