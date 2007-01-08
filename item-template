@@ -153,13 +153,14 @@ then
 
 zenity --window-icon="E_ICON" --warning --text "$txt21"
 
-# If they chose to cancel.
-[ $? -eq 0 ] || exit
-
-fi
-
+if test "$?" = "0";then
 # Restore the item.
 RestoreItem
+fi
+else
+# Restore the item.
+RestoreItem
+fi
 
 elif [ "$1" = "-delete" ]
 then

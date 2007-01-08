@@ -17,7 +17,7 @@ actual=`date +"%Y-%m-%dT%T"`
                 txt4="Empty the Trashcan"
                 txt5="Confirm Delete:"
                 txt6="The trashcan is empty!"
-                txt7="The next item(s) are restored:"
+                txt7="Restore ALL items in trashcan?"
                 txt8="Move to trash"
                 txt9="Delete this item(s)?"
                 txt10="You can't move"
@@ -51,7 +51,7 @@ Do you want to continue?"
                 txt4="Vaciar la Papelera"
                 txt5="Confirmar eliminacion:"
                 txt6="La papelera esta vacia!"
-                txt7="Los siguientes items fueron restaurados:"
+                txt7="Restaurar TODOS los items de la papelera?"
                 txt8="Mover a Papelera"
                 txt9="Borrar estos items?"
                 txt10="No puedes mover"
@@ -619,6 +619,11 @@ if [ "$stuff" = "" ]; then
 zenity --window-icon="$empty_icon" --error --text "$txt6"
 else
 
+zenity --window-icon="$empty_icon"  --warning --text "$txt7"
+
+  # If they chose to cancel.
+  [ $? -eq 0 ] || exit
+
 cd "$APPDIR/.restore-all"
 
 for restore in `ls`
@@ -626,8 +631,6 @@ do
 `./*`
 done
 
-zenity --window-icon="$empty_icon" --info --text "$txt7
-$stuff"
 
 fi
 
