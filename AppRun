@@ -118,7 +118,7 @@ full_icon="$HOME/.icons/$theme/scalable/filesystems/fs-trash-full.svg"
 fi
 
 else
-
+if [ -e "$HOME/.icons/$theme/48x48" ]; then
 gnome=`find "$HOME/.icons/$theme/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -130,7 +130,7 @@ else
 
 empty_icon="$HOME/.icons/$theme/48x48/filesystems/fs-trash-empty.png"
 full_icon="$HOME/.icons/$theme/48x48/filesystems/fs-trash-full.png"
-
+fi
 fi
 fi
 fi
@@ -170,7 +170,7 @@ full_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-trash-full.svg"
 fi
 
 else
-
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48"; then
 gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -184,7 +184,7 @@ empty_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-trash-empty.png"
 full_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-trash-full.png"
 
 fi
-
+fi
 fi
 fi
 
@@ -218,7 +218,7 @@ full_icon="/usr/share/pixmaps/icons/$theme/scalable/filesystems/fs-trash-full.sv
 fi
 
 else
-
+if test -e "/usr/share/pixmaps/icons/$theme/48x48/filesystems"; then
 gnome=`find "/usr/share/pixmaps/icons/$theme/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -232,7 +232,7 @@ empty_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/fs-trash-empty.png
 full_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/fs-trash-full.png"
 
 fi
-
+fi
 fi
 fi
 
@@ -255,7 +255,7 @@ full_icon="$HOME/.icons/hicolor/scalable/filesystems/fs-trash-full.svg"
 fi
 
 else
-
+if test -e "$HOME/.icons/hicolor/48x48"; then
 gnome=`find "$HOME/.icons/hicolor/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -269,7 +269,7 @@ empty_icon="$HOME/.icons/hicolor/48x48/filesystems/fs-trash-empty.png"
 full_icon="$HOME/.icons/hicolor/48x48/filesystems/fs-trash-full.png"
 
 fi
-
+fi
 fi
 fi
 
@@ -292,7 +292,7 @@ full_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems/fs-trash-full.svg"
 fi
 
 else
-
+if test -e "$XDG_DATA_DIRS/icons/hicolor/48x48"; then
 gnome=`find "$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -306,7 +306,7 @@ empty_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/fs-trash-empty.png"
 full_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/fs-trash-full.png"
 
 fi
-
+fi
 fi
 fi
 
@@ -329,7 +329,7 @@ full_icon="/usr/share/pixmaps/icons/hicolor/scalable/filesystems/fs-trash-full.s
 fi
 
 else
-
+if test -e "/usr/share/pixmaps/icons/hicolor/48x48"; then
 gnome=`find "/usr/share/pixmaps/icons/hicolor/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -343,7 +343,7 @@ empty_icon="/usr/share/pixmaps/icons/hicolor/48x48/filesystems/fs-trash-empty.pn
 full_icon="/usr/share/pixmaps/icons/hicolor/48x48/filesystems/fs-trash-full.png"
 
 fi
-
+fi
 fi
 fi
 
@@ -524,7 +524,7 @@ trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/mime-$filetype.svg"
 fi
 
 else
-
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes"; then
 gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -536,7 +536,7 @@ else
 trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/mime-$filetype.png"
 
 fi
-
+fi
 fi
 
 fi
@@ -633,7 +633,7 @@ trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-directory.svg"
 fi
 
 else
-
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems"; then
 gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -645,7 +645,7 @@ else
 trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-directory.png"
 
 fi
-
+fi
 fi
 
 if test -e "/usr/share/pixmaps/$theme/scalable/filesystems"; then
@@ -711,7 +711,7 @@ trash_icon="$HOME/.icons/$theme/scalable/mimetypes/mime-$filetype.svg"
 fi
 
 else
-
+if test -e "$HOME/.icons/$theme/48x48/mimetypes"; then
 gnome=`find "$HOME/.icons/$theme/48x48/mimetypes" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -721,7 +721,7 @@ trash_icon="$HOME/.icons/$theme/48x48/mimetypes/gnome-mime-$filetype.png"
 else
 
 trash_icon="$HOME/.icons/$theme/48x48/mimetypes/mime-$filetype.png"
-
+fi
 fi
 fi
 fi
@@ -746,7 +746,7 @@ trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/mime-$filetype.svg"
 fi
 
 else
-
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes"; then
 gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -756,7 +756,7 @@ trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/gnome-mime-$filetype.png
 else
 
 trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/mime-$filetype.png"
-
+fi
 fi
 fi
 fi
@@ -781,7 +781,7 @@ trash_icon="/usr/share/pixmaps/$theme/scalable/mimetypes/mime-$filetype.svg"
 fi
 
 else
-
+if test -e "/usr/share/pixmaps/$theme/48x48/mimetypes"; then
 gnome=`find "/usr/share/pixmaps/$theme/48x48/mimetypes" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -791,7 +791,7 @@ trash_icon="/usr/share/pixmaps/$theme/48x48/mimetypes/gnome-mime-$filetype.png"
 else
 
 trash_icon="/usr/share/pixmaps/$theme/48x48/mimetypes/mime-$filetype.png"
-
+fi
 fi
 fi
 fi
@@ -824,7 +824,7 @@ trash_icon="$HOME/.icons/$theme/scalable/filesystems/fs-regular.svg"
 fi
 
 else
-
+if test -e "$HOME/.icons/$theme/48x48/filesystems"; then
 gnome=`find "$HOME/.icons/$theme/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -834,7 +834,7 @@ trash_icon="$HOME/.icons/$theme/48x48/filesystems/gnome-fs-regular.png"
 else
 
 trash_icon="$HOME/.icons/$theme/48x48/filesystems/fs-regular.png"
-
+fi
 fi
 fi
 fi
@@ -862,12 +862,14 @@ trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/gnome-fs-regular.sv
 
 else
 
+
 trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-regular.svg"
 
 fi
 
 else
 
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems"; then
 gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -877,7 +879,7 @@ trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/gnome-fs-regular.png"
 else
 
 trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-regular.png"
-
+fi
 fi
 fi
 fi
@@ -909,7 +911,7 @@ trash_icon="/usr/share/pixmaps/icons/$theme/scalable/filesystems/fs-regular.svg"
 fi
 
 else
-
+if test -e "/usr/share/pixmaps/icons/$theme/48x48"; then
 gnome=`find "/usr/share/pixmaps/icons/$theme/48x48/filesystems" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -919,7 +921,7 @@ trash_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/gnome-fs-regular.p
 else
 
 trash_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/fs-regular.png"
-
+fi
 fi
 fi
 fi
@@ -944,7 +946,7 @@ trash_icon="$HOME/.icons/hicolor/scalable/mimetypes/mime-$filetype.svg"
 fi
 
 else
-
+if test -e "$HOME/.icons/hicolor/48x48"; then
 gnome=`find "$HOME/.icons/hicolor/48x48/mimetypes" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -955,7 +957,7 @@ else
 
 trash_icon="$HOME/.icons/hicolor/48x48/mimetypes/mime-$filetype.png"
 
-
+fi
 fi
 fi
 fi
@@ -978,7 +980,7 @@ trash_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/mimetypes/mime-$filetype.svg"
 fi
 
 else
-
+if test -e "$XDG_DATA_DIRS/icons/hicolor/scalable"; then
 gnome=`find "$XDG_DATA_DIRS/icons/hicolor/48x48/mimetypes" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -989,7 +991,7 @@ else
 
 trash_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/mimetypes/mime-$filetype.png"
 
-
+fi
 fi
 fi
 fi
@@ -1012,7 +1014,7 @@ trash_icon="/usr/share/pìxmaps/icons/hicolor/scalable/mimetypes/mime-$filetype.s
 fi
 
 else
-
+if test -e "/usr/share/pìxmaps/icons/hicolor/48x48"; then
 gnome=`find "/usr/share/pìxmaps/icons/hicolor/48x48/mimetypes" -name gnome*`
 
 if [ "$gnome" != "" ]; then
@@ -1022,7 +1024,7 @@ trash_icon="/usr/share/pìxmaps/icons/hicolor/48x48/mimetypes/gnome-mime-$filetyp
 else
 
 trash_icon="/usr/share/pìxmaps/icons/hicolor/48x48/mimetypes/mime-$filetype.png"
-
+fi
 
 fi
 fi
@@ -1135,7 +1137,7 @@ if [ "$stuff" = "" ]; then
 zenity --window-icon="$empty_icon" --error --text "$txt3"
 else
  # Write the confirmation message.
-zenity --window-icon="$empty_icon"  --title "$txt4" --question --text "$txt5"
+zenity --window-icon="$empty_icon"  --title "$txt4" --warning --text "$txt5"
 
   # If they chose to cancel.
   [ $? -eq 0 ] || exit
