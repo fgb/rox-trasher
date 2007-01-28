@@ -4,13 +4,14 @@ Version 0.5-dev
 
 - Better file type detection, based on rox mime-type detection.
 - Added Spanish translations (Translations Work in Progress).
-- Added suport to use the icon of the current theme used (WORK IN PROGRESS - FreeDesktop.org, icon-theme-spec) and removed the icons subfolder.
+- Added suport to use the icon of the current theme used (WORK IN PROGRESS - FreeDesktop.org, icon theme specifications) and removed the icons subfolder.
+- FIXED bug with restore-all operation and items with spaces in their names.
 
 
 Version 0.4
 -----------
 
-- Added FreeDesktop.org specifications.
+- Added FreeDesktop.org trashcan specifications.
 - Removed all sounds.
 - Now restore the panel shortcut if the trashed item has one.
 - Improved the pinboard restauration operation.

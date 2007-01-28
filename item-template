@@ -1,5 +1,5 @@
 #!/bin/bash
-# December, 2006 - Gabriel Rojas - Fernando Garcia Bermudez
+# February, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
 
 # Determine the path to this application.
 APPDIR=`dirname "$0"`
@@ -20,9 +20,9 @@ Do you want to overwite it?"
 		######## Español ########
 		es* )
                 txt21="Un item llamado PATH ya existe.
-Deseas sobreescribirlo?"
-                txt22="REALMENTE deseas eliminar este item?"
-                txt23="Quieres restaurar el item PATH?"
+¿Deseas sobreescribirlo?"
+                txt22="¿REALMENTE deseas eliminar este item?"
+                txt23="¿Quieres restaurar el item PATH?"
                 txt24="No puedes arrastrar elementos sobre items que se encuentran en la papelera."
                 txt25="Confirmar accion"
 	esac
@@ -133,8 +133,11 @@ rox -x "TRASH"
 
 fi
 
+# BUG FIX: items with space on their names
+file2=${FileName/' '/%}
+
 # Remove the restore-all file info.
-rm "TRASH/.restore-all/restore-FILE"
+rm "TRASH/.restore-all/restore-$file2"
 
 # Delete this file and directory.
 rm -fr "$APPDIR"
@@ -217,19 +220,20 @@ zenity --window-icon="E_ICON" --title "$txt25" --question --text "$txt23"
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
 
-# See if there is already a file or folder of the same name in the same location.
+# See if there is already a item of the same name in the same location.
 if [ -e "PATH" ]
 then
 
 zenity --window-icon="E_ICON" --warning --text "$txt21"
 
-# If they chose to cancel.
-[ $? -eq 0 ] || exit
-
-fi
-
+if test "$?" = "0";then
 # Restore the item.
 RestoreItem
+fi
+else
+# Restore the item.
+RestoreItem
+fi
 
 
 else
