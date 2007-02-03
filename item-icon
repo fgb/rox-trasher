@@ -1,0 +1,588 @@
+#!/bin/bash
+# February, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
+
+# Determine the path to this application.
+APPDIR=`dirname "$0"`
+cd "$APPDIR"
+APPDIR="`pwd`"
+
+if  [ "$XDG_DATA_DIRS" = "" ]; then
+    XDG_DATA_DIRS="/usr/share"
+fi
+
+if test -e "$HOME/.gtkrc-2.0"; then
+theme=`grep gtk-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+if  [ "$theme" = "" ];then
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+else
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+
+trash_icon=`find "$HOME/.config/rox.sourceforge.net/MIME-icons" -name $3.png`
+
+if [ "$trash_icon" = "" ];then 
+
+type=${3/_/-}
+
+if test -e "$HOME/.icons/$theme/scalable/filesystems"; then
+
+gnome=`find "$HOME/.icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/$theme/scalable/filesystems/gnome-fs-directory.svg"
+
+else
+
+trash_icon="$HOME/.icons/$theme/scalable/filesystems/fs-directory.svg"
+
+fi
+
+else
+
+if test -e "$HOME/.icons/$theme/48x48"; then
+
+gnome=`find "$HOME/.icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/$theme/48x48/filesystems/gnome-fs-directory.png"
+
+else
+
+trash_icon="$HOME/.icons/$theme/48x48/filesystems/fs-directory.png"
+fi
+fi
+fi
+
+if [ "$trash_icon" = "" ];then 
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/gnome-mime-$type.svg"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/mime-$type.svg"
+
+fi
+
+else
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes"; then
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/gnome-mime-$type.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/mime-$type.png"
+
+fi
+fi
+fi
+
+fi
+
+if [ "$trash_icon" = "" ];then 
+
+if test -e "/usr/share/pixmaps/icons/$theme/scalable/mimetypes"; then
+
+gnome=`find "/usr/share/pixmaps/icons/$theme/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pixmaps/icons/$theme/scalable/mimetypes/gnome-mime-$type.svg"
+
+else
+
+trash_icon="/usr/share/pixmaps/icons/$theme/scalable/mimetypes/mime-$type.svg"
+
+fi
+
+else
+
+if test -e "/usr/share/pixmaps/$theme/48x48"; then
+
+gnome=`find "/usr/share/pixmaps/icons/$theme/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pixmaps/icons/$theme/48x48/mimetypes/gnome-mime-$type.png"
+
+else
+
+trash_icon="/usr/share/pixmaps/icons/$theme/48x48/mimetypes/mime-$type.png"
+
+fi
+fi
+fi
+
+fi
+
+if [ -d "$4/files/$2" ];then
+
+if [ -e "$4/files/$2/.DirIcon" ];then
+
+trash_icon="$4/files/$2/.DirIcon"
+
+else
+
+if [ -e "$HOME/.icons/$theme/scalable/filesystems" ]; then
+
+gnome=`find "$HOME/.icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/$theme/scalable/filesystems/gnome-fs-directory.svg"
+
+else
+
+trash_icon="$HOME/.icons/$theme/scalable/filesystems/fs-directory.svg"
+
+fi
+
+else
+
+if [ -e "$HOME/.icons/$theme/48x48" ]; then
+
+gnome=`find "$HOME/.icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/$theme/48x48/filesystems/gnome-fs-directory.png"
+
+else
+
+trash_icon="$HOME/.icons/$theme/48x48/filesystems/fs-directory.png"
+
+fi
+fi
+fi
+
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/gnome-fs-directory.svg"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-directory.svg"
+
+fi
+
+else
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems"; then
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/gnome-fs-directory.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-directory.png"
+
+fi
+fi
+fi
+
+if test -e "/usr/share/pixmaps/$theme/scalable/filesystems"; then
+
+gnome=`find "/usr/share/pixmaps/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pixmaps/$theme/scalable/filesystems/gnome-fs-directory.svg"
+
+else
+
+trash_icon="/usr/share/pixmaps/$theme/scalable/filesystems/fs-directory.svg"
+
+fi
+
+else
+
+if test -e "/usr/share/pixmaps/$theme/48x48"; then
+
+gnome=`find "/usr/share/pixmaps/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pixmaps/$theme/48x48/filesystems/gnome-fs-directory.png"
+
+else
+
+trash_icon="/usr/share/pixmaps/$theme/48x48/filesystems/fs-directory.png"
+
+fi
+fi
+fi
+
+fi
+fi
+
+  if [ -x "$4/files/$2/AppRun" ]; then
+if [ -e "$4/files/$2/.DirIcon" ]; then
+trash_icon="$4/files/$2/.DirIcon"
+else
+trash_icon="/usr/lib/rox/ROX-Filer/images/application.png"
+fi
+fi
+
+if test ! -e "$trash_icon"; then
+
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+
+if test -e "$HOME/.icons/$theme/scalable/mimetypes"; then
+
+gnome=`find "$HOME/.icons/$theme/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/$theme/scalable/mimetypes/gnome-mime-$type.svg"
+
+else
+
+trash_icon="$HOME/.icons/$theme/scalable/mimetypes/mime-$type.svg"
+
+fi
+
+else
+if test -e "$HOME/.icons/$theme/48x48/mimetypes"; then
+gnome=`find "$HOME/.icons/$theme/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/$theme/48x48/mimetypes/gnome-mime-$type.png"
+
+else
+
+trash_icon="$HOME/.icons/$theme/48x48/mimetypes/mime-$type.png"
+fi
+fi
+fi
+fi
+
+if test ! -e "$trash_icon"; then
+
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/gnome-mime-$type.svg"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes/mime-$type.svg"
+
+fi
+
+else
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes"; then
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/gnome-mime-$type.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/mimetypes/mime-$type.png"
+fi
+fi
+fi
+fi
+
+if test ! -e "$trash_icon"; then
+
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+
+if test -e "/usr/share/pixmaps/$theme/scalable/mimetypes"; then
+
+gnome=`find "/usr/share/pixmaps/$theme/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pixmaps/$theme/scalable/mimetypes/gnome-mime-$type.svg"
+
+else
+
+trash_icon="/usr/share/pixmaps/$theme/scalable/mimetypes/mime-$type.svg"
+
+fi
+
+else
+if test -e "/usr/share/pixmaps/$theme/48x48/mimetypes"; then
+gnome=`find "/usr/share/pixmaps/$theme/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pixmaps/$theme/48x48/mimetypes/gnome-mime-$type.png"
+
+else
+
+trash_icon="/usr/share/pixmaps/$theme/48x48/mimetypes/mime-$type.png"
+fi
+fi
+fi
+fi
+
+if test ! -e "$trash_icon"; then
+if test -e "$HOME/.gtkrc-2.0"; then
+theme=`grep gtk-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+if  [ "$theme" = "" ];then
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+else
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+
+if test -e "$HOME/.icons/$theme/scalable/filesystems"; then
+
+gnome=`find "$HOME/.icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/$theme/scalable/filesystems/gnome-fs-regular.svg"
+
+else
+
+trash_icon="$HOME/.icons/$theme/scalable/filesystems/fs-regular.svg"
+
+fi
+
+else
+if test -e "$HOME/.icons/$theme/48x48/filesystems"; then
+gnome=`find "$HOME/.icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/$theme/48x48/filesystems/gnome-fs-regular.png"
+
+else
+
+trash_icon="$HOME/.icons/$theme/48x48/filesystems/fs-regular.png"
+fi
+fi
+fi
+fi
+
+if test ! -e "$trash_icon"; then
+if test -e "$HOME/.gtkrc-2.0"; then
+theme=`grep gtk-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+if  [ "$theme" = "" ];then
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+else
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/gnome-fs-regular.svg"
+
+else
+
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-regular.svg"
+
+fi
+
+else
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems"; then
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/gnome-fs-regular.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-regular.png"
+fi
+fi
+fi
+fi
+if test ! -e "$trash_icon"; then
+if test -e "$HOME/.gtkrc-2.0"; then
+theme=`grep gtk-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+if  [ "$theme" = "" ];then
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+else
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+
+if test -e "/usr/share/pixmaps/icons/$theme/scalable/filesystems"; then
+
+gnome=`find "/usr/share/pixmaps/icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pixmaps/icons/$theme/scalable/filesystems/gnome-fs-regular.svg"
+
+else
+
+trash_icon="/usr/share/pixmaps/icons/$theme/scalable/filesystems/fs-regular.svg"
+
+fi
+
+else
+if test -e "/usr/share/pixmaps/icons/$theme/48x48"; then
+gnome=`find "/usr/share/pixmaps/icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/gnome-fs-regular.png"
+
+else
+
+trash_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/fs-regular.png"
+fi
+fi
+fi
+fi
+
+fi
+
+if test ! -e "$trash_icon"; then
+
+
+if test -e "$HOME/.icons/hicolor/scalable/mimetypes"; then
+
+gnome=`find "$HOME/.icons/hicolor/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/hicolor/scalable/mimetypes/gnome-mime-$type.svg"
+
+else
+
+trash_icon="$HOME/.icons/hicolor/scalable/mimetypes/mime-$type.svg"
+
+fi
+
+else
+if test -e "$HOME/.icons/hicolor/48x48"; then
+gnome=`find "$HOME/.icons/hicolor/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$HOME/.icons/hicolor/48x48/mimetypes/gnome-mime-$type.png"
+
+else
+
+trash_icon="$HOME/.icons/hicolor/48x48/mimetypes/mime-$type.png"
+
+fi
+fi
+fi
+fi
+
+if test ! -e "$trash_icon"; then
+
+
+if test -e "$XDG_DATA_DIRS/icons/hicolor/scalable/mimetypes"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/hicolor/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/mimetypes/gnome-mime-$type.svg"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/mimetypes/mime-$type.svg"
+
+fi
+
+else
+if test -e "$XDG_DATA_DIRS/icons/hicolor/scalable"; then
+gnome=`find "$XDG_DATA_DIRS/icons/hicolor/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/mimetypes/gnome-mime-$type.png"
+
+else
+
+trash_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/mimetypes/mime-$type.png"
+
+fi
+fi
+fi
+fi
+
+if test ! -e "$trash_icon"; then
+
+
+if test -e "/usr/share/pìxmaps/icons/hicolor/scalable/mimetypes"; then
+
+gnome=`find "/usr/share/pìxmaps/icons/hicolor/scalable/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pìxmaps/icons/hicolor/scalable/mimetypes/gnome-mime-$type.svg"
+
+else
+
+trash_icon="/usr/share/pìxmaps/icons/hicolor/scalable/mimetypes/mime-$type.svg"
+
+fi
+
+else
+if test -e "/usr/share/pìxmaps/icons/hicolor/48x48"; then
+gnome=`find "/usr/share/pìxmaps/icons/hicolor/48x48/mimetypes" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+trash_icon="/usr/share/pìxmaps/icons/hicolor/48x48/mimetypes/gnome-mime-$type.png"
+
+else
+
+trash_icon="/usr/share/pìxmaps/icons/hicolor/48x48/mimetypes/mime-$type.png"
+fi
+
+fi
+fi
+fi
+
+# Link the icon for the trashed item.
+ln -sf "$trash_icon" "$1/$2/.DirIcon"
+
+exit

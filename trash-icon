@@ -1,0 +1,261 @@
+#!/bin/bash
+# February, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
+
+# Determine the path to this application.
+APPDIR=`dirname "$0"`
+cd "$APPDIR"
+APPDIR="`pwd`"
+
+if test -e "$HOME/.gtkrc-2.0"; then
+theme=`grep gtk-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+if  [ "$theme" = "" ];then
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+else
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fi
+
+if test -e "$HOME/.icons"; then
+
+if [ -e "$HOME/.icons/$theme" ]; then
+if [ -e "$HOME/.icons/$theme/scalable" ]; then
+
+gnome=`find "$HOME/.icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$HOME/.icons/$theme/scalable/filesystems/gnome-fs-trash-empty.svg"
+full_icon="$HOME/.icons/$theme/scalable/filesystems/gnome-fs-trash-full.svg"
+
+else
+
+empty_icon="$HOME/.icons/$theme/scalable/filesystems/fs-trash-empty.svg"
+full_icon="$HOME/.icons/$theme/scalable/filesystems/fs-trash-full.svg"
+
+fi
+
+else
+if [ -e "$HOME/.icons/$theme/48x48" ]; then
+gnome=`find "$HOME/.icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$HOME/.icons/$theme/48x48/filesystems/gnome-fs-trash-empty.png"
+full_icon="$HOME/.icons/$theme/48x48/filesystems/gnome-fs-trash-full.png"
+
+else
+
+empty_icon="$HOME/.icons/$theme/48x48/filesystems/fs-trash-empty.png"
+full_icon="$HOME/.icons/$theme/48x48/filesystems/fs-trash-full.png"
+fi
+fi
+fi
+fi
+fi
+
+if [ ! -e "$empty_icon" ] || [ ! -e "$full_icon" ]; then
+
+if  [ "$XDG_DATA_DIRS" = "" ]; then
+    XDG_DATA_DIRS="/usr/share"
+fi
+
+if test -e "$XDG_DATA_DIRS/icons/$theme/scalable"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/gnome-fs-trash-empty.svg"
+full_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/gnome-fs-trash-full.svg"
+
+else
+
+empty_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-trash-empty.svg"
+full_icon="$XDG_DATA_DIRS/icons/$theme/scalable/filesystems/fs-trash-full.svg"
+
+fi
+
+else
+if test -e "$XDG_DATA_DIRS/icons/$theme/48x48"; then
+gnome=`find "$XDG_DATA_DIRS/icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/gnome-fs-trash-empty.png"
+full_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/gnome-fs-trash-full.png"
+
+else
+
+empty_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-trash-empty.png"
+full_icon="$XDG_DATA_DIRS/icons/$theme/48x48/filesystems/fs-trash-full.png"
+
+fi
+fi
+fi
+fi
+
+if [ ! -e "$empty_icon" ] || [ ! -e "$full_icon" ]; then
+
+if test -e "/usr/share/pixmaps/icons/$theme/scalable"; then
+
+gnome=`find "/usr/share/pixmaps/icons/$theme/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="/usr/share/pixmaps/icons/$theme/scalable/filesystems/gnome-fs-trash-empty.svg"
+full_icon="/usr/share/pixmaps/icons/$theme/scalable/filesystems/gnome-fs-trash-full.svg"
+
+else
+
+empty_icon="/usr/share/pixmaps/icons/$theme/scalable/filesystems/fs-trash-empty.svg"
+full_icon="/usr/share/pixmaps/icons/$theme/scalable/filesystems/fs-trash-full.svg"
+
+fi
+
+else
+if test -e "/usr/share/pixmaps/icons/$theme/48x48/filesystems"; then
+gnome=`find "/usr/share/pixmaps/icons/$theme/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/gnome-fs-trash-empty.png"
+full_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/gnome-fs-trash-full.png"
+
+else
+
+empty_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/fs-trash-empty.png"
+full_icon="/usr/share/pixmaps/icons/$theme/48x48/filesystems/fs-trash-full.png"
+
+fi
+fi
+fi
+fi
+
+if [ ! -e "$empty_icon" ] || [ ! -e "$full_icon" ]; then
+
+if test -e "$HOME/.icons/hicolor/scalable"; then
+
+gnome=`find "$HOME/.icons/hicolor/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$HOME/.icons/hicolor/scalable/filesystems/gnome-fs-trash-empty.svg"
+full_icon="$HOME/.icons/hicolor/scalable/filesystems/gnome-fs-trash-full.svg"
+
+else
+
+empty_icon="$HOME/.icons/hicolor/scalable/filesystems/fs-trash-empty.svg"
+full_icon="$HOME/.icons/hicolor/scalable/filesystems/fs-trash-full.svg"
+
+fi
+
+else
+if test -e "$HOME/.icons/hicolor/48x48"; then
+gnome=`find "$HOME/.icons/hicolor/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$HOME/.icons/hicolor/48x48/filesystems/gnome-fs-trash-empty.png"
+full_icon="$HOME/.icons/hicolor/48x48/filesystems/gnome-fs-trash-full.png"
+
+else
+
+empty_icon="$HOME/.icons/hicolor/48x48/filesystems/fs-trash-empty.png"
+full_icon="$HOME/.icons/hicolor/48x48/filesystems/fs-trash-full.png"
+
+fi
+fi
+fi
+fi
+
+if [ ! -e "$empty_icon" ] || [ ! -e "$full_icon" ]; then
+
+if test -e "$XDG_DATA_DIRS/icons/hicolor/scalable"; then
+
+gnome=`find "$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems/gnome-fs-trash-empty.svg"
+full_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems/gnome-fs-trash-full.svg"
+
+else
+
+empty_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems/fs-trash-empty.svg"
+full_icon="$XDG_DATA_DIRS/icons/hicolor/scalable/filesystems/fs-trash-full.svg"
+
+fi
+
+else
+if test -e "$XDG_DATA_DIRS/icons/hicolor/48x48"; then
+gnome=`find "$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/gnome-fs-trash-empty.png"
+full_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/gnome-fs-trash-full.png"
+
+else
+
+empty_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/fs-trash-empty.png"
+full_icon="$XDG_DATA_DIRS/icons/hicolor/48x48/filesystems/fs-trash-full.png"
+
+fi
+fi
+fi
+fi
+
+if [ ! -e "$empty_icon" ] || [ ! -e "$full_icon" ]; then
+
+if test -e "/usr/share/pixmaps/icons/hicolor/scalable"; then
+
+gnome=`find "/usr/share/pixmaps/icons/hicolor/scalable/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="/usr/share/pixmaps/icons/hicolor/scalable/filesystems/gnome-fs-trash-empty.svg"
+full_icon="/usr/share/pixmaps/icons/hicolor/scalable/filesystems/gnome-fs-trash-full.svg"
+
+else
+
+empty_icon="/usr/share/pixmaps/icons/hicolor/scalable/filesystems/fs-trash-empty.svg"
+full_icon="/usr/share/pixmaps/icons/hicolor/scalable/filesystems/fs-trash-full.svg"
+
+fi
+
+else
+if test -e "/usr/share/pixmaps/icons/hicolor/48x48"; then
+gnome=`find "/usr/share/pixmaps/icons/hicolor/48x48/filesystems" -name gnome*`
+
+if [ "$gnome" != "" ]; then
+
+empty_icon="/usr/share/pixmaps/icons/hicolor/48x48/filesystems/gnome-fs-trash-empty.png"
+full_icon="/usr/share/pixmaps/icons/hicolor/48x48/filesystems/gnome-fs-trash-full.png"
+
+else
+
+empty_icon="/usr/share/pixmaps/icons/hicolor/48x48/filesystems/fs-trash-empty.png"
+full_icon="/usr/share/pixmaps/icons/hicolor/48x48/filesystems/fs-trash-full.png"
+
+fi
+fi
+fi
+fi
+
+
+if [ "$1" = "full" ];then
+
+ln -sf "$full_icon" "$APPDIR/.DirIcon"
+rox -x "$APPDIR"
+
+else
+
+ln -sf "$empty_icon" "$APPDIR/.DirIcon"
+rox -x "$APPDIR"
+
+fi
+
+exit
