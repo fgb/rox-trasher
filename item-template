@@ -127,14 +127,14 @@ getFileName "$APPDIR"
 if [ "$FileName" = "$stuff" ]
 then
 
-ln -sf "E_ICON" "TRASH/.DirIcon"
+"TRASH/trash-icon" empty
 
 rox -x "TRASH"
 
 fi
 
 # BUG FIX: items with space on their names
-file2=${FileName/' '/%}
+file2=${FileName//' '/%}
 
 # Remove the restore-all file info.
 rm "TRASH/.restore-all/restore-$file2"
@@ -154,7 +154,7 @@ then
 if [ -e "PATH" ]
 then
 
-zenity --window-icon="E_ICON" --warning --text "$txt21"
+zenity --window-icon="TRASH/.DirIcon" --warning --text "$txt21"
 
 if test "$?" = "0";then
 # Restore the item.
@@ -167,7 +167,7 @@ fi
 
 elif [ "$1" = "-delete" ]
 then
-zenity --window-icon="E_ICON" --warning --text "$txt22"
+zenity --window-icon="TRASH/.DirIcon" --warning --text "$txt22"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -182,7 +182,7 @@ getFileName "$APPDIR"
 if [ "$FileName" = "$stuff" ]
 then
 
-ln -sf "E_ICON" "TRASH/.DirIcon"
+"TRASH/trash-icon" empty
 
 rox -x "TRASH"
 
@@ -200,7 +200,7 @@ getFileName "$APPDIR"
 if [ "$FileName" = "$stuff" ]
 then
 
-ln -sf "E_ICON" "TRASH/.DirIcon"
+"TRASH/trash-icon" empty
 
 rox -x "TRASH"
 
@@ -215,7 +215,7 @@ then
 # If they just clicked on the icon.
 
 # Write the confirmation message.
-zenity --window-icon="E_ICON" --title "$txt25" --question --text "$txt23"
+zenity --window-icon="TRASH/.DirIcon" --title "$txt25" --question --text "$txt23"
 
 # If they chose to cancel.
 [ $? -eq 0 ] || exit
@@ -224,7 +224,7 @@ zenity --window-icon="E_ICON" --title "$txt25" --question --text "$txt23"
 if [ -e "PATH" ]
 then
 
-zenity --window-icon="E_ICON" --warning --text "$txt21"
+zenity --window-icon="TRASH/.DirIcon" --warning --text "$txt21"
 
 if test "$?" = "0";then
 # Restore the item.
@@ -242,7 +242,7 @@ else
 
 # Write the error message.
 
-zenity --window-icon="E_ICON" --error --text="$txt24"
+zenity --window-icon="TRASH/.DirIcon" --error --text="$txt24"
 
 fi
 
