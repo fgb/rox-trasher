@@ -1,5 +1,5 @@
 #!/bin/bash
-# February, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
+# March, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
 
 # Determine the path to this application.
 APPDIR=`dirname "$0"`
