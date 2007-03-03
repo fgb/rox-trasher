@@ -4,14 +4,14 @@
   <About xml:lang="en">
     <Purpose>Trashcan application for the ROX Filer and Desktop</Purpose>
     <License>GPL: http://www.gnu.org/licenses/gpl.txt</License>
-    <Version>0.5-dev - February, 2007</Version>
+    <Version>0.6-dev - March, 2007</Version>
     <Authors>Gabriel Rojas - Fernando Garcia Bermudez</Authors>
     <Homepage>http://code.google.com/p/rox-trasher/</Homepage>
   </About>
   <About xml:lang="es">
     <Purpose label="Proposito">Aplicacion de papelera para ROX Filer y Desktop</Purpose>
     <License label="Licencia">GPL: http://www.gnu.org/licenses/gpl.txt</License>
-    <Version>0.5-dev - Febrero, 2007</Version>
+    <Version>0.6-dev - Marzo, 2007</Version>
     <Authors label="Autores">Gabriel Rojas - Fernando Garcia Bermudez</Authors>
     <Homepage label="Pagina Web">http://code.google.com/p/rox-trasher/</Homepage>
   </About>

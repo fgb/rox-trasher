@@ -34,6 +34,8 @@ Do you want to continue?"
                 txt17="There is one or more Panel shortcuts pointing to"
                 txt18="This will move the original item to the Trash and remove the shortcut(s) from the Panel.
 Do you want to continue?"
+txt19="ROX-Trasher 0.5
+Fernando Garcia Bermudez - Gabriel Rojas"
                 appinfo1="Deleted on:"
                 appinfo2="Origin:"
                 appinfo3="Type"
@@ -69,6 +71,8 @@ La papelera movera el enlace y dejara el elemento.
                 txt17="Hay uno o mas accesos de panel apuntando a"
                 txt18="La papelera movera el item y el acceso del panel.
 ¿Deseas continuar?"
+                txt19="ROX-Trasher 0.5 
+Fernando Garcia Bermudez - Gabriel Rojas"
                 appinfo1="Borrado el:"
                 appinfo2="Origen:"
                 appinfo3="Tipo"
@@ -110,6 +114,12 @@ else
 fi
 
 [ -d $interface ] || mkdir -p $interface
+
+if test -e "$APPDIR/.first_time"; then
+zenity --info --text="$txt19"
+"$APPDIR/trash-icon" empty
+rm "$APPDIR/.first_time"
+fi
 
 # Find the name of the file.
 function notAForwardSlash
