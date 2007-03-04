@@ -1,64 +1,51 @@
 #!/bin/bash
+# ROX-Trasher: Trashed item template script
 # March, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
 
-# Determine the path to this application.
-APPDIR=`dirname "$0"`
-cd "$APPDIR"
+#### Initialization
+
+# Determine the path of the script
+cd `dirname "$0"`
 APPDIR="`pwd`"
 
-#################################################
-#	TRANSLATIONS
-		###### Default = English #####
-                txt21="An item named PATH already exists.
-Do you want to overwite it?"
-                txt22="Do you REALLY want to delete this item?"
-                txt23="Do you want to restore the item PATH?"
-                txt24="You can't drop items onto things that are in the Trash."
-                txt25="Confirm action"
+#####	TRANSLATIONS
+# English (Default)
+msg21="An item named PATH already exists.\nDo you want to overwite it?"
+msg22="Do you REALLY want to delete this item?"
+msg23="Do you want to restore the item PATH?"
+msg24="You can't drop items onto things that are in the Trash."
+msg25="Confirm action"
 
-	case $LANG in
-		######## Español ########
-		es* )
-                txt21="Un item llamado PATH ya existe.
-¿Deseas sobreescribirlo?"
-                txt22="¿REALMENTE deseas eliminar este item?"
-                txt23="¿Quieres restaurar el item PATH?"
-                txt24="No puedes arrastrar elementos sobre items que se encuentran en la papelera."
-                txt25="Confirmar accion"
-	esac
-### End of Translations ###
-###########################
+case $LANG in
+    # Español
+    es* )
+        msg21="Un item llamado PATH ya existe.\n¿Deseas sobreescribirlo?"
+        msg22="¿REALMENTE deseas eliminar este item?"
+        msg23="¿Quieres restaurar el item PATH?"
+        msg24="No puedes arrastrar elementos sobre items que se encuentran en la papelera."
+        msg25="Confirmar accion"
+esac
 
-
-
-# Find the name of the file.
-function notAForwardSlash
-{
-fSlash=/
-   if [[ $1 != $fSlash ]]
-
-        then
-      return 0
-        else
-           return 1
-        fi
+# Find the name of the item
+function notAForwardSlash {
+    fSlash=/
+    
+    if [[ $1 != $fSlash ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
-
-function getFileName
-{
+function processFileName {
    STRING="$1"
+   LENGTH=${#STRING}
 
-        LENGTH=${#STRING}
-
-   for ((n=0;n <= $LENGTH; n++))
-        do
+   for ((n=0;n <= $LENGTH; n++)); do
       CHAR=${STRING:$n:1}
 
-      if notAForwardSlash $CHAR
-      then
+      if notAForwardSlash $CHAR; then
          FileName=$FileName$CHAR
-
       else
          FileName=""
       fi
@@ -66,22 +53,20 @@ function getFileName
 }
 
 # Get the name of the item in the Trash.
-getFileName "PATH"
+processFileName "PATH"
 
-function RestoreItem
-{
+function RestoreItem {
 
+    # Restore the item.
+    mv "XDG/files/FILE" "PATH"
 
-# Restore the item.
-mv "XDG/files/FILE" "PATH"
-
-# Get info from the pinboard shortcut file (if exists)
-if [ -e "$APPDIR/shortcut" ]; then
-x_ar=`awk '{print $2}' $APPDIR/shortcut | sed -e s/x=//g -e s/\"//g`
-y_ar=`awk '{print $3}' $APPDIR/shortcut | sed -e s/y=//g -e s/\"//`
-pth="PATH"
-label_desk=`grep "PATH" $APPDIR/shortcut | sed -e s/'label'// -e s/'"'// -e s/'">'// -e s/'<\/icon>'// -e s/'<icon x='// -e s/$x_ar// -e s/$y_ar// -e s/'y='// -e s/'="'// -e s/'"'// -e s/'"'// -e s/'"'// -e s^$pth^^`
-label_desk=`expr "$label_desk" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+    # Get info from the pinboard shortcut file (if exists)
+    if [ -e "$APPDIR/shortcut" ]; then
+        x_ar=`awk '{print $2}' $APPDIR/shortcut | sed -e s/x=//g -e s/\"//g`
+        y_ar=`awk '{print $3}' $APPDIR/shortcut | sed -e s/y=//g -e s/\"//`
+        pth="PATH"
+        label_desk=`grep "PATH" $APPDIR/shortcut | sed -e s/'label'// -e s/'"'// -e s/'">'// -e s/'<\/icon>'// -e s/'<icon x='// -e s/$x_ar// -e s/$y_ar// -e s/'y='// -e s/'="'// -e s/'"'// -e s/'"'// -e s/'"'// -e s^$pth^^`
+        label_desk=`expr "$label_desk" : '[[:space:]]*\(.*\)[[:space:]]*$'`
 
 # Restore the shortcut on the desktop
 rox --RPC << EOF
@@ -97,13 +82,13 @@ rox --RPC << EOF
  </env:Body>
 </env:Envelope>
 EOF
-fi
+    fi
 
-# Get info from the panel shortcut file (if exists)
-if [ -e "$APPDIR/shortcut_panel" ]; then
-
-side=`sed -e 2d "$APPDIR/shortcut_panel"`
-label=`sed -e 1d "$APPDIR/shortcut_panel"`
+    # Get info from the panel shortcut file (if exists)
+    if [ -e "$APPDIR/shortcut_panel" ]; then
+        side=`sed -e 2d "$APPDIR/shortcut_panel"`
+        label=`sed -e 1d "$APPDIR/shortcut_panel"`
+    
 # Restore the shortcut on the panel
 rox --RPC << EOF
 <?xml version="1.0"?>
@@ -117,133 +102,107 @@ rox --RPC << EOF
  </env:Body>
 </env:Envelope>
 EOF
-fi
+    fi
 
-# See what is in the trash.
-stuff=`ls STORE`
+    # See what is in the trash.
+    stuff="`ls STORE`"
 
-getFileName "$APPDIR"
+    processFileName "$APPDIR"
 
-if [ "$FileName" = "$stuff" ]
-then
+    if [ "$FileName" = "$stuff" ]; then
+        "TRASH/trash-icon" empty
+        rox -x "TRASH"
+    fi
 
-"TRASH/trash-icon" empty
+    # BUG FIX: items with space on their names
+    file2=${FileName//' '/%}
 
-rox -x "TRASH"
+    # Remove the restore-all file info
+    rm "TRASH/.restore-all/restore-$file2"
 
-fi
-
-# BUG FIX: items with space on their names
-file2=${FileName//' '/%}
-
-# Remove the restore-all file info.
-rm "TRASH/.restore-all/restore-$file2"
-
-# Delete this file and directory.
-rm -fr "$APPDIR"
-rm -fr "XDG/files/FILE"
-rm -fr "XDG/info/FILE.trashinfo"
+    # Delete this file and directory.
+    rm -fr "$APPDIR"
+    rm -fr "XDG/files/FILE"
+    rm -fr "XDG/info/FILE.trashinfo"
 
 }
 
 # If they chose the "Restore" option.
-if [ "$1" = "-restore" ]
-then
+if [ "$1" = "-restore" ]; then
 
-# See if there is already a file or folder of the same name in the same location.
-if [ -e "PATH" ]
-then
+    # See if there is already a file or folder of the same name in the same location
+    if [ -e "PATH" ]; then
+        zenity --window-icon="TRASH/.DirIcon" --warning --text "$msg21"
 
-zenity --window-icon="TRASH/.DirIcon" --warning --text "$txt21"
+        if test "$?" = "0"; then
+            # Restore the item.
+            RestoreItem
+        fi
+    else
+        # Restore the item
+        RestoreItem
+    fi
 
-if test "$?" = "0";then
-# Restore the item.
-RestoreItem
-fi
-else
-# Restore the item.
-RestoreItem
-fi
+elif [ "$1" = "-delete" ]; then
+    zenity --window-icon="TRASH/.DirIcon" --warning --text "$msg22"
 
-elif [ "$1" = "-delete" ]
-then
-zenity --window-icon="TRASH/.DirIcon" --warning --text "$txt22"
+    # If they chose to cancel.
+    [ $? -eq 0 ] || exit
 
-# If they chose to cancel.
-[ $? -eq 0 ] || exit
+    # Remove the restore-all file info.
+    rm "TRASH/.restore-all/restore-FILE"
 
-# Remove the restore-all file info.
-rm "TRASH/.restore-all/restore-FILE"
+    stuff="`ls STORE`"
 
-stuff=`ls STORE`
+    processFileName "$APPDIR"
 
-getFileName "$APPDIR"
+    if [ "$FileName" = "$stuff" ]; then
+        "TRASH/trash-icon" empty
+        rox -x "TRASH"
+    fi
 
-if [ "$FileName" = "$stuff" ]
-then
+    # Delete this file and its directory
+    rm -fr "$APPDIR"
+    rm -fr "XDG/files/FILE"
+    rm -fr "XDG/info/FILE.trashinfo"
 
-"TRASH/trash-icon" empty
-
-rox -x "TRASH"
-
-fi
-
-# Delete this file and directory.
-rm -fr "$APPDIR"
-rm -fr "XDG/files/FILE"
-rm -fr "XDG/info/FILE.trashinfo"
-
-stuff=`ls STORE`
-
-getFileName "$APPDIR"
-
-if [ "$FileName" = "$stuff" ]
-then
-
-"TRASH/trash-icon" empty
-
-rox -x "TRASH"
-
-fi
+# Extra???
+#    stuff=`ls STORE`
+#
+#    processFileName "$APPDIR"
+#
+#    if [ "$FileName" = "$stuff" ]; then
+#        "TRASH/trash-icon" empty
+#        rox -x "TRASH"
+#    fi
 
 else
+    # Check to see if they clicked on the application or dropped a file or directory on the icon.
+    if [ "$*" = "" ]; then
+        # If they just clicked on the icon.
 
-# Check to see if they clicked on the application or dropped a file or directory on the icon.
-if [ "$*" = "" ]
-then
+        # Ask for confirmation.
+        zenity --window-icon="TRASH/.DirIcon" --title "$msg25" --question --text "$msg23"
 
-# If they just clicked on the icon.
+        # If they chose to cancel.
+        [ $? -eq 0 ] || exit
 
-# Write the confirmation message.
-zenity --window-icon="TRASH/.DirIcon" --title "$txt25" --question --text "$txt23"
+        # See if there is already a item of the same name in the same location.
+        if [ -e "PATH" ]; then
+            zenity --window-icon="TRASH/.DirIcon" --warning --text "$msg21"
 
-# If they chose to cancel.
-[ $? -eq 0 ] || exit
+            if test "$?" = "0"; then
+                # Restore the item.
+                RestoreItem
+            fi
+        else
+            # Restore the item.
+            RestoreItem
+        fi
+    else
+        # If they dropped something to the icon.
 
-# See if there is already a item of the same name in the same location.
-if [ -e "PATH" ]
-then
-
-zenity --window-icon="TRASH/.DirIcon" --warning --text "$txt21"
-
-if test "$?" = "0";then
-# Restore the item.
-RestoreItem
-fi
-else
-# Restore the item.
-RestoreItem
-fi
-
-
-else
-
-# If they dropped something to the icon.
-
-# Write the error message.
-
-zenity --window-icon="TRASH/.DirIcon" --error --text="$txt24"
-
-fi
-
+        # Write the error message.
+        zenity --window-icon="TRASH/.DirIcon" --error --text="$msg24"
+    fi
 fi

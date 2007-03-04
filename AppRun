@@ -1,419 +1,351 @@
 #!/bin/bash
+# ROX-Trasher: Trash can script
 # March, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
 
-# Determine the path where the application was installed
-cd `dirname "$0"`
-APPDIR = `pwd`
+############################################################
+#### Initialization
 
-datetime=`date +"%Y-%m-%dT%T"`
+# Determine the path of the script
+cd "`dirname "$0"`"
+APPDIR="`pwd`"
 
-#################################################
-#################################################
-#	TRANSLATIONS
-		###### Default = English #####
-		txt1="Zenity is not installed, you need zenity >= 2.12.1"
-		txt2="HIDDEN-"
-		txt3="The trash is already empty!"
-                txt4="Empty the Trash"
-                txt5="Delete all files in trash?
-(This can be undone!!!)"
-                txt6="The trash is empty!"
-                txt7="Restore ALL items in trash?"
-                txt8="Move to trash"
-                txt9="Delete this item(s)?"
-                txt10="You can't move"
-                txt11="to the Trash because of insufficient permissions."
-                txt12="Do you still want to delete it?" 
-                txt13="The item"
-                txt14="is a Symbolic Link.
-This will move the Symbolic Link to the Trash and leave the original item  alone.
-Do you want to continue?"
-                txt15="There is one or more Desktop shortcuts pointing to"
-                txt16="This will move the original item to the Trash and remove the shortcut(s) from the Desktop.
-Do you want to continue?"
-                txt17="There is one or more Panel shortcuts pointing to"
-                txt18="This will move the original item to the Trash and remove the shortcut(s) from the Panel.
-Do you want to continue?"
-txt19="ROX-Trasher 0.5
-Fernando Garcia Bermudez - Gabriel Rojas"
-                appinfo1="Deleted on:"
-                appinfo2="Origin:"
-                appinfo3="Type"
-                appinfo4="Deleted"
-                appinfo5="Origin"
-                appinfo6="Restore"
-                appinfo7="Delete"
+# Variables
+datetime="`date +"%Y-%m-%dT%T"`"
 
-	case $LANG in
-		######## Español ########
-		es* )
-                    # AppRun strings
-		txt1="Zenity no esta instalado, necesitas >= 2.12.1"
-		txt2="OCULTO-"
-		txt3="¡La papelera ya esta vacia!"
-                txt4="Vaciar la Papelera"
-                txt5="¿Eliminar todos los elementos de la papelera?
-(¡¡¡Esto no puede deshacerse!!!)"
-                txt6="¡La papelera esta vacia!"
-                txt7="¿Restaurar TODOS los elementos de la papelera?"
-                txt8="Mover a Papelera"
-                txt9="¿Borrar este/os elemento(s)?"
-                txt10="No puedes mover"
-                txt11="a la papelera por permisos insuficientes."
-                txt12="¿Todavia quieres eliminarlos?" 
-                txt13="El item"
-                txt14="es un enlace simbolico.
-La papelera movera el enlace y dejara el elemento.
-¿Deseas continuar?"
-                txt15="Hay uno o mas accesos de escritorio apuntando a"
-                txt16="La papelera movera el item y el acceso del pinboard.
-¿Deseas continuar?"
-                txt17="Hay uno o mas accesos de panel apuntando a"
-                txt18="La papelera movera el item y el acceso del panel.
-¿Deseas continuar?"
-                txt19="ROX-Trasher 0.5 
-Fernando Garcia Bermudez - Gabriel Rojas"
-                appinfo1="Borrado el:"
-                appinfo2="Origen:"
-                appinfo3="Tipo"
-                appinfo4="Eliminacion"
-                appinfo5="Origen"
-                appinfo6="Restaurar"
-                appinfo7="Borrar"
-	esac
+##### Translations
 
-### End of Translations ###
-###########################
-###########################
+# English (Default)
+msg1="Zenity is not installed and you need a version >= 2.12.1 to be able to show dialogs on the screen."
+msg2="HIDDEN-"
+msg3="The trash can is already empty!"
+msg4="Empty the trash can"
+msg5="Delete all items in the trash can?\n\nNote: This can't be undone!!!"
+msg6="The trash can is empty!"
+msg7="Restore ALL items from the trash can?"
+msg8="Move to the trash can"
+msg9="Delete this item(s)?"
+msg10="You don't have sufficient permissions to move"
+msg11="to the trash can."
+msg12="\n\nDo you still want to delete the item(s)?" 
+msg13="The item"
+msg14="is a symbolic link.\nThis will move the link to the trash can and leave the original item alone.\n\nDo you want to continue?"
+msg15="There's one or more shortcuts on the desktop pointing to"
+msg16="\nThis will move the original item to the trash can and remove the shortcuts from the desktop.\n\nDo you want to continue?"
+msg17="There's one or more shortcuts on the panel pointing to"
+msg18="\nThis will move the original item to the trash can and remove the shortcuts from the panel.\n\nDo you want to continue?"
+msg19="ROX-Trasher 0.5.1\nFernando Garcia Bermudez - Gabriel Rojas"
+appinfo1="Deletion"
+appinfo2="Origin"
+appinfo3="Type"
+appinfo4="Restore"
+appinfo5="Delete"
 
-# Check if zenity is installed.
+case $LANG in
+
+    # Español
+    es* )
+    msg1="Zenity no esta instalado y necesitarías una versión >= 2.12.1 para poder mostrar los dialogos en pantalla."
+    msg2="OCULTO-"
+    msg3="¡El cesto de basura ya esta vacio!"
+    msg4="Vaciar el cesto de basura"
+    msg5="¿Eliminar todos los elementos del cesto de basura?\n\nNota: ¡¡¡Esto no puede deshacerse!!!"
+    msg6="¡El cesto de basura esta vacio!"
+    msg7="¿Restaurar TODOS los elementos del cesto de basura?"
+    msg8="Mover al cesto de basura"
+    msg9="¿Borrar este elemento(s)?"
+    msg10="No tiene los permisos suficientes para mover"
+    msg11="al cesto de basura."
+    msg12="\n\n¿Todavia quieres eliminarlo(s)?" 
+    msg13="El item"
+    msg14="es un enlace simbólico.\nEsto moverá el enlace al cesto de basura y no tocará al elemento original.\n\n¿Desea continuar?"
+    msg15="Hay uno o más accesos directos en el escritorio apuntando a"
+    msg16="\nEsto moverá el elemento original al cesto de basura y borrará los accesos directos del escritorio.\n\n¿Desea continuar?"
+    msg17="Hay uno o más accesos directos en el panel apuntando a"
+    msg18="Esto moverá el elemento original al cesto de basura y borrará los accesos directos del panel.\n\n¿Desea continuar?"
+    msg19="ROX-Trasher 0.5.1\nFernando Garcia Bermudez - Gabriel Rojas"
+    appinfo1="Eliminación"
+    appinfo2="Origen"
+    appinfo3="Tipo"
+    appinfo4="Restaurar"
+    appinfo5="Borrar"
+esac
+
+# Check if zenity is installed
 if !which zenity &> /dev/null; then
-if which xmessage &> /dev/null; then
-xmessage -buttons "Ok" -center "$txt1"
-else
-echo "$txt1"
+    if which xmessage &> /dev/null; then
+        xmessage -buttons "Ok" -center "$msg1"
+    else
+        echo "$msg1"
+    fi
+    exit
 fi
-exit
+
+# Show the splash screen the first time the program runs
+if test -e "$APPDIR/.first_use"; then
+    zenity --info --text="$msg19"
+    "$APPDIR/trash-icon empty"
+    rm "$APPDIR/.first_use"
 fi
 
 # Create the Trash directory if it doesn't already exist.
 if  [ "$XDG_DATA_HOME" != "" ]; then
-    trash=$XDG_DATA_HOME/Trash
+    trash="$XDG_DATA_HOME/Trash"
 else
-    trash=$HOME/.local/share/Trash
+    trash="$HOME/.local/share/Trash"
 fi
 
-[ -d $trash/files ] || mkdir -p $trash/files
-[ -d $trash/info ] || mkdir -p $trash/info
+[ -d "$trash/files" ] || mkdir -p "$trash/files"
+[ -d "$trash/info" ] || mkdir -p "$trash/info"
 
 # Create the Trash interface if it doesn't already exist
 if  [ "$XDG_CONFIG_HOME" != "" ]; then
-    interface=$XDG_CONFIG_HOME/ROX-Trasher
+    interface="$XDG_CONFIG_HOME/ROX-Trasher"
 else
-    interface=$HOME/.config/ROX-Trasher
+    interface="$HOME/.config/ROX-Trasher"
 fi
 
-[ -d $interface ] || mkdir -p $interface
+[ -d "$interface" ] || mkdir -p "$interface"
 
-if test -e "$APPDIR/.first_time"; then
-zenity --info --text="$txt19"
-"$APPDIR/trash-icon" empty
-rm "$APPDIR/.first_time"
-fi
+############################################################
+#### Functions
 
-# Find the name of the file.
-function notAForwardSlash
-{
-fSlash=/
- if [[ $1 != $fSlash ]]
-
-  then
-   return 0
-  else
-   return 1
- fi
+# Find the name of the item
+function notAForwardSlash {
+    fSlash=/
+    
+    if [[ $1 != $fSlash ]]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
-function getFileName
-{
- STRING=$1
+function processFileName {
+    STRING=$1
+    LENGTH=${#STRING}
 
- LENGTH=${#STRING}
-
- for ((n=0;n <= $LENGTH; n++))
-  do
-   CHAR=${STRING:$n:1}
-
-   if notAForwardSlash $CHAR
-    then
-    FileName=$FileName$CHAR
-
-   else
-    FileName=""
-  fi
-done
+    for ((n=0;n <= $LENGTH; n++)); do
+        CHAR=${STRING:$n:1}
+        
+        if notAForwardSlash $CHAR; then
+            FileName=$FileName$CHAR
+        else
+            FileName=""
+        fi
+    done
+    
+    # Add a suffix if the item is hidden
+    FileName="${FileName/#./$msg2}"
+    
+    # Create directory for the trashed item.
+    if test ! -e "$interface/$FileName-$$"; then
+        mkdir "$interface/$FileName-$$"
+    fi
 }
 
-function MoveToTrash
-{
-getFileName "$m"
+# Move item to the trash can
+function MoveToTrash {
 
+    processFileName "$m"
 
-# Add a suffix if the item is a hidden file/directory
-FileName=${FileName/#./$txt2}
+    # Create the info file in the info directory
+    echo -e "[Trash Info]\nPath=$m\nDeletionDate=$datetime" > "$trash/info/$FileName-$$.trashinfo"
 
+    # Move the trashed item to the files directory
+    mv "$m" "$trash/files/$FileName-$$"
 
+    # Set the trashed item type
+    if [ -x "$trash/files/$FileName-$$/AppRun" ]; then
+        filetype="rox-application"
+    else
+        filetype=`rox -m "$trash/files/$FileName-$$"`
+        filetype=${filetype/\//_}
+    fi
 
-# Create directories for the trashed item.
+    # Create the trashed item icon
+    "$APPDIR/item-icon" "$interface" "$FileName-$$" "$filetype" "$trash"
 
-# First, check if File dir exists
-if test ! -e "$interface/$FileName-$$" ; then
-mkdir "$interface/$FileName-$$"
-fi
-
-
-# Create the info file
-echo "[Trash Info]
-Path=$m
-DeletionDate=$datetime" > "$trash/info/$FileName-$$.trashinfo"
-
-
-# move the item to the files Trash directory.
-mv "$m" "$trash/files/$FileName-$$"
-
-# Set the item type
-  if [ -x "$trash/files/$FileName-$$/AppRun" ]; then
-    filetype="rox-application"
-  else
-filetype=`rox -m "$trash/files/$FileName-$$"`
-filetype=${filetype/\//_}
-fi
-
-# Create the item icon
-"$APPDIR/item-icon" "$interface" "$FileName-$$" "$filetype" "$trash"
-
-# Create the AppInfo file
-filetype=${filetype/_/-}
-echo "<?xml version=\"1.0\"?>
+    # Create the trashed item AppInfo file
+    filetype=${filetype/_/-}
+    echo "<?xml version=\"1.0\"?>
 <AppInfo>
-  <Summary>$filetype - $appinfo1 $datetime - $appinfo2 $m</Summary>
-  <About>
-    <$appinfo3>$filetype</$appinfo3>
-    <$appinfo4>$datetime</$appinfo4>
-    <$appinfo5>$m</$appinfo5>
-  </About>
-   <AppMenu>
-    <Item label=\"$appinfo6\" option=\"-restore\"/>
-    <Item label=\"$appinfo7\" option=\"-delete\"/>
-   </AppMenu>
+    <Summary>$filetype - $appinfo1: $datetime - $appinfo2: $m</Summary>
+    <About>
+        <$appinfo3>$filetype</$appinfo3>
+        <$appinfo1>$datetime</$appinfo1>
+        <$appinfo2>$m</$appinfo2>
+    </About>
+    <AppMenu>
+        <Item label=\"$appinfo4\" option=\"-restore\"/>
+        <Item label=\"$appinfo5\" option=\"-delete\"/>
+    </AppMenu>
 </AppInfo>" > "$interface/$FileName-$$/AppInfo.xml"
 
 
-# Write the new AppRun file with some variables
-gawk -v var="PATH" -v name="$m" -v trash="$APPDIR" -v xdg="$trash" -v store="$interface" -v file="$FileName-$$"   '{sub(var, name)}
+    # Write the trashed item AppRun file
+    gawk -v var="PATH" -v name="$m" -v trash="$APPDIR" -v xdg="$trash" -v store="$interface" -v file="$FileName-$$"   '{sub(var, name)}
 {sub("TRASH", trash)}
 {sub("XDG", xdg)}
 {sub("STORE", store)}
 {sub("FILE", file)}
 {sub("TRASH", trash); print}' "$APPDIR/item-template" > "$interface/$FileName-$$/AppRun"
 
-# Write the restore-all info
-if test ! -e "$APPDIR/.restore-all" ; then
-mkdir "$APPDIR/.restore-all"
-fi
+    # Update the .restore-all directory
+    if test ! -e "$APPDIR/.restore-all" ; then
+        mkdir "$APPDIR/.restore-all"
+    fi
 
-echo "#!/bin/bash
-cd \"$interface/$FileName-$$\" 
-./AppRun -restore
-exit " > "$APPDIR/.restore-all/restore-$FileName-$$"
+    echo -e "#!/bin/bash\ncd \"$interface/$FileName-$$\"\n./AppRun -restore\nexit" > "$APPDIR/.restore-all/restore-$FileName-$$"
 
-# Make it executables
-chmod 777 "$interface/$FileName-$$/AppRun"
-chmod 777 "$APPDIR/.restore-all/restore-$FileName-$$"
+    # Bestow the necessary permissions on executables
+    chmod 777 "$interface/$FileName-$$/AppRun"
+    chmod 777 "$APPDIR/.restore-all/restore-$FileName-$$"
 
-# BUG FIX: Item with space on their names
-FileName2=${FileName//' '/%}
+    # BUG FIX: Items with spaces on their names
+    FileName2=${FileName//' '/%}
 
-if [ "$FileName" != "$FileName2" ]; then 
-mv "$APPDIR/.restore-all/restore-$FileName-$$" "$APPDIR/.restore-all/restore-$FileName2-$$"
-fi
-
+    if [ "$FileName" != "$FileName2" ]; then 
+        mv "$APPDIR/.restore-all/restore-$FileName-$$" "$APPDIR/.restore-all/restore-$FileName2-$$"
+    fi
 }
 
-function RemoveOldRoxIcon
-{
-if test -e $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default; then
-while grep ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default
- do
+function RemoveOldRoxIcon {
+    if test -e "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"; then
+        while `grep ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"`; do
 
+          number=`grep -m 1 ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"`
 
-  number=`grep -m 1 ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default`
+          # Write the new pinboard file with the trashed item removed.
+          gawk -v var="$number" '{sub(var, ""); print}' "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default" > "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default1"
 
-  # Write the new Pinboard file with the trashed item removed.
-  gawk -v var="$number" '{sub(var, ""); print}' $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default > $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default1
+          # Rename the new pb_Default file
+          mv "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default1" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"
 
-  # Rename the new pb_Default file
-  mv $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default1 $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default
+          # Restart the pinboard.
+          rox -S
 
-  # Restart the pinboard.
-  rox -S
-
-done
-fi
-}
-
-function RemoveOldRoxIcon_Panel
-{
-if test -e $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default; then
-while grep ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default
- do
-
-
-  number=`grep -m 1 ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default`
-
-  # Write the new Panel file with the trashed item removed.
-  gawk -v var="$number" '{sub(var, ""); print}' $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default > $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default1
-
-  # Rename the new pan_Default file
-  mv $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default1 $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default
-
-  # Restart the panel.
-  rox -S
-
-done
-fi
-}
-
-if [ "$1" = "-empty" ]
-then
-
- # See what is in the trash.
- stuff=`ls $interface`
-
-if [ "$stuff" = "" ]; then
-zenity --window-icon="$APPDIR/.DirIcon" --error --text "$txt3"
-else
- # Write the confirmation message.
-zenity --window-icon="$APPDIR/.DirIcon"  --title "$txt4" --warning --text "$txt5"
-
-  # If they chose to cancel.
-  [ $? -eq 0 ] || exit
-
-  # If they chose to delete.
-  rm -fr "$interface/"*
-  rm -fr "$APPDIR/.restore-all/"*
-  rm -fr "$trash/files/"*
-  rm -fr "$trash/info/"*
-
- "$APPDIR/trash-icon" empty
-
-
-fi
-elif [ "$1" = "-restore-all" ]
-then
-
- # See what is in the trash.
- stuff=`ls $interface`
-
-if [ "$stuff" = "" ]; then
-zenity --window-icon="$APPDIR/.DirIcon" --error --text "$txt6"
-else
-
-zenity --window-icon="$APPDIR/.DirIcon"  --warning --text "$txt7"
-
-  # If they chose to cancel.
-  [ $? -eq 0 ] || exit
-
-
-cd "$APPDIR/.restore-all"
-    for restore in `ls`; do
-            `./$restore`
         done
+    fi
+}
 
+function RemoveOldRoxIcon_Panel {
+    if test -e $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default; then
+        while grep ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default; do
 
-fi
+             number=`grep -m 1 ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default"`
 
+             # Write the new Panel file with the trashed item removed.
+             gawk -v var="$number" '{sub(var, ""); print}' "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default" > "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default1"
 
+             # Rename the new pan_Default file
+             mv "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default1" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default" 
+
+             # Restart the panel.
+             rox -S
+
+        done
+    fi
+}
+
+############################################################
+#### Arguments Parsing
+
+if [ "$1" = "-empty" ]; then
+
+    # Check trash can contents
+    stuff=`ls "$interface"`
+
+    if [ "$stuff" = "" ]; then
+        zenity --window-icon="$APPDIR/.DirIcon" --error --text "$msg3"
+    else
+        # Ask for confirmation
+        zenity --window-icon="$APPDIR/.DirIcon" --title "$msg4" --warning --text "$msg5"
+
+        # If they chose to cancel.
+        [ $? -eq 0 ] || exit
+
+        # If they chose to delete.
+        rm -fr "$interface/"*
+        rm -fr "$APPDIR/.restore-all/"*
+        rm -fr "$trash/files/"*
+        rm -fr "$trash/info/"*
+
+        "$APPDIR/trash-icon" empty
+    fi
+
+elif [ "$1" = "-restore-all" ]; then
+
+    # Check trash can contents
+    stuff=`ls "$interface"`
+
+    if [ "$stuff" = "" ]; then
+        zenity --window-icon="$APPDIR/.DirIcon" --error --text "$msg6"
+    else
+        # Ask for confirmation
+        zenity --window-icon="$APPDIR/.DirIcon"  --warning --text "$msg7"
+
+        # If they chose to cancel.
+        [ $? -eq 0 ] || exit
+
+        cd "$APPDIR/.restore-all"
+        for restore in `ls`; do `./$restore`; done
+    fi
+    
 else
 
- # Check to see if they clicked on the application or sent a file or directory to be deleted.
- if [ "$*" = "" ]
- then
+    # Check to see if they clicked on the application or sent a file or directory to be deleted.
+    if [ "$*" = "" ]; then
+        # If they just clicked on the icon.
+        exec rox "$interface"
+    else
+        # If they sent something to the trash can.
+        zenity --title="$msg8" --window-icon="$APPDIR/.DirIcon" --question --text "$msg9"
 
-  # If they just clicked on the icon.
-  exec rox $interface
+        if [ "$?" = "0" ]; then
+            for m in "$@"; do
 
-else
+                # Check if the item can be deleted (write access).
+                if [ ! -w "$m" ]; then 
+                    zenity --error --window-icon="$APPDIR/.DirIcon" --text "$msg10 $m $msg11"
+                    continue
+                fi
 
+                # Check if the item can be trashed (read access).
+                if [ ! -r "$m" ]; then 
+                    zenity --warning --window-icon="$APPDIR/.DirIcon" --text "$msg10 $m $msg11$msg12"
+                    [ $? -eq 0 ] || continue
+                fi
 
- # If they sent something to the trash can.
-zenity --title="$txt8" --window-icon="$APPDIR/.DirIcon" --question --text "$txt9"
-if [ "$?" = "0" ]
- then
+                # Test to see if the item is a symbolic link.
+                if [ -h "$m" ]; then
+                    # Write the confirmation message.
+                    zenity --window-icon="$APPDIR/.DirIcon" --warning --text "$msg13 $m $msg14"
 
- for m in "$@"
- do
+                    # If they chose to cancel.
+                    [ $? -eq 0 ] || exit
+                fi
+                
+                # Test to see if the item had a link to it on the pinboard.
+                if test -e "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"; then
+                    match=`grep ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"`
 
-            # Check if the item can be deleted (write access).
-            if [ ! -w "$m" ]; then 
-                zenity --error --window-icon="$APPDIR/.DirIcon" --text "$txt10 $m $txt11"
-                continue
-            fi
-            
-            # Check if the item can be trashed (read access).
-            if [ ! -r "$m" ]; then 
-                zenity --warning --window-icon="$APPDIR/.DirIcon" --text "$txt10 $m $txt11 
-$txt12"
-                [ $? -eq 0 ] || continue
-            fi
+                    test "$match"
+                    if [ "$?" = "0" ]; then
 
-  # Test to see if the item is a symbolic link.
-  if [ -h "$m" ]
-  then
+                        # Write the confirmation message.
+                        zenity --window-icon="$APPDIR/.DirIcon" --warning --text "$msg15 $m.$msg16"
 
-   # Write the confirmation message.
-zenity --window-icon="$APPDIR/.DirIcon" --warning --text "$txt13 $m $txt14"
+                        # If they chose to cancel.
+                        [ $? -eq 0 ] || exit
 
-  # If they chose to cancel.
-  [ $? -eq 0 ] || exit
+                        while check=`grep ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"`; do
+                            OldNumber=`grep -c ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"`
 
- fi
-if test -e $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default; then
- match=`grep ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default`
+                            # Get the filename again
+                            processFileName "$m"
 
- # Test $match to see if the item had a link to it on the pinboard.
- test "$match"
- if [ "$?" = "0" ]
- then
-
-  # Write the confirmation message.
-zenity --window-icon="$APPDIR/.DirIcon" --warning --text "$txt15 $m
-$txt16"
-
-  # If they chose to cancel.
-  [ $? -eq 0 ] || exit
-
-
- while check=`grep ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default`
- do
-
-  OldNumber=`grep -c ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default`
-
-
-# Get the filename again
-getFileName "$m"
-
-
-# Add a suffix if the item is a hidden file/directory
-FileName=${FileName/#./$txt2}
-
-# Create directories for the trashed item.
-if test ! -e $interface/$FileName-$$; then
-mkdir "$interface/$FileName-$$"
-fi
-
-# Create the shortcut file info
-echo "$match" > "$interface/$FileName-$$/shortcut"
+                            # Create the shortcut file info
+                            echo "$match" > "$interface/$FileName-$$/shortcut"
 
 rox --RPC << EOF
 <?xml version="1.0"?>
@@ -426,61 +358,43 @@ rox --RPC << EOF
 </env:Envelope>
 EOF
 
-# Check to see if the entry was removed.
-NewNumber=`grep -c ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default`
-if [ "$OldNumber" = "$NewNumber" ]
-then
+                            # Check to see if the entry was removed.
+                            NewNumber=`grep -c ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"`
+                            if [ "$OldNumber" = "$NewNumber" ]; then
+                               # If SOAP did not work then remove the icon manualy.
+                               RemoveOldRoxIcon "$match"
+                            fi
+                        done
+                    fi
 
-# If SOAP did not work then remove the icon manualy.
-RemoveOldRoxIcon "$match"
+                fi
 
-fi
-done
-fi
+                # Test to see if the item had a link to it on the panel.
+                if test -e "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default"; then
+                    match_panel=`grep ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default"`
 
-fi
+                    test "$match_panel"
+                    if [ "$?" = "0" ]; then
 
-if test -e $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default; then
- match_panel=`grep ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default`
+                        # Write the confirmation message.
+                        zenity --window-icon="$APPDIR/.DirIcon" --warning --text "$msg17 $m.$msg18"
 
- # Test $match_panel to see if the item had a link to it on the panel.
- test "$match_panel"
- if [ "$?" = "0" ]
- then
+                        # If they chose to cancel.
+                        [ $? -eq 0 ] || exit
 
-  # Write the confirmation message.
-zenity --window-icon="$APPDIR/.DirIcon" --warning --text "$txt17 $m
-$txt18"
+                        while check=`grep ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default"`; do
+                            OldNumber_Panel=`grep -c ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default"`
 
-  # If they chose to cancel.
-  [ $? -eq 0 ] || exit
+                            # Get the filename again
+                            processFileName "$m"
 
-
- while check=`grep ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default`
- do
-
-  OldNumber_Panel=`grep -c ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default`
-
-
-# Get the filename again
-getFileName "$m"
-
-
-# Add a suffix if the item is a hidden file/directory
-FileName=${FileName/#./$txt2}
-
-# Create directories for the trashed item.
-if test ! -e "$interface/$FileName-$$"; then
-mkdir "$interface/$FileName-$$"
-fi
-
-# Create the shortcut file info
-side=`grep "panel side" $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default | sed -e s/'<panel side='// -e s/'"'// -e s/'">'//`
-side=`expr "$side" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-echo "$side" > "$interface/$FileName-$$/shortcut_panel"
-label=`grep ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default | sed -e s/'<icon label='// -e s/'"'// -e s/'">'// -e s^"$m"^^ -e s/'<\/icon>'//`
-label=`expr "$label" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-echo "$label" >> "$interface/$FileName-$$/shortcut_panel"
+                            # Create the shortcut file info
+                            side=`grep "panel side" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default" | sed -e s/'<panel side='// -e s/'"'// -e s/'">'//`
+                            side=`expr "$side" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+                            echo "$side" > "$interface/$FileName-$$/shortcut_panel"
+                            label=`grep ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default" | sed -e s/'<icon label='// -e s/'"'// -e s/'">'// -e s^"$m"^^ -e s/'<\/icon>'//`
+                            label=`expr "$label" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+                            echo "$label" >> "$interface/$FileName-$$/shortcut_panel"
 
 rox --RPC << EOF
 <?xml version="1.0"?>
@@ -494,24 +408,22 @@ rox --RPC << EOF
 </env:Envelope>
 EOF
 
-# Check to see if the entry was removed.
-NewNumber_Panel=`grep -c ">$m<" $HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default`
-if [ "$OldNumber_Panel" = "$NewNumber_Panel" ]
-then
+                            # Check to see if the entry was removed.
+                            NewNumber_Panel=`grep -c ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default"`
 
-# If SOAP did not work then remove the icon manualy.
-RemoveOldRoxIcon_Panel "$match_panel"
+                            if [ "$OldNumber_Panel" = "$NewNumber_Panel" ]; then
+                                # If SOAP did not work then remove the icon manualy.
+                                RemoveOldRoxIcon_Panel "$match_panel"
+                            fi
+                        done
+                    fi
+                fi
 
-fi
-done
-fi
-fi
+                MoveToTrash "$m"
 
-MoveToTrash "$m"
+                "$APPDIR/trash-icon" full
 
-
-"$APPDIR/trash-icon" full
-done
-fi
-fi
+            done
+        fi
+    fi
 fi

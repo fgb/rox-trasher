@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <AppInfo>
-  <Summary>ROX-Trasher</Summary>
-  <About xml:lang="en">
-    <Purpose>Trashcan application for the ROX Filer and Desktop</Purpose>
-    <License>GPL: http://www.gnu.org/licenses/gpl.txt</License>
-    <Version>0.6-dev - March, 2007</Version>
-    <Authors>Gabriel Rojas - Fernando Garcia Bermudez</Authors>
-    <Homepage>http://code.google.com/p/rox-trasher/</Homepage>
-  </About>
-  <About xml:lang="es">
-    <Purpose label="Proposito">Aplicacion de papelera para ROX Filer y Desktop</Purpose>
-    <License label="Licencia">GPL: http://www.gnu.org/licenses/gpl.txt</License>
-    <Version>0.6-dev - Marzo, 2007</Version>
-    <Authors label="Autores">Gabriel Rojas - Fernando Garcia Bermudez</Authors>
-    <Homepage label="Pagina Web">http://code.google.com/p/rox-trasher/</Homepage>
-  </About>
-  <AppMenu>
+    <Summary>ROX-Trasher</Summary>
+    <About xml:lang="en">
+        <Purpose>Trashcan application for the ROX Filer and Desktop</Purpose>
+        <License>GPL: http://www.gnu.org/licenses/gpl.txt</License>
+        <Version>0.5.1-dev - March, 2007</Version>
+        <Authors>Gabriel Rojas - Fernando Garcia Bermudez</Authors>
+        <Homepage>http://code.google.com/p/rox-trasher/</Homepage>
+    </About>
+    <About xml:lang="es">
+        <Purpose label="Proposito">Cesto de basura para ROX Filer y Desktop</Purpose>
+        <License label="Licencia">GPL: http://www.gnu.org/licenses/gpl.txt</License>
+        <Version>0.5.1-dev - Marzo, 2007</Version>
+        <Authors label="Autores">Gabriel Rojas - Fernando Garcia Bermudez</Authors>
+        <Homepage label="Pagina Web">http://code.google.com/p/rox-trasher/</Homepage>
+    </About>
+    <AppMenu>
         <Item option="-restore-all">
-<Label xml:lang="en">Restore All</Label>
-<Label xml:lang="es">Restaurar todo</Label>
-</Item>
+            <Label xml:lang="en">Restore All</Label>
+            <Label xml:lang="es">Restaurar todo</Label>
+        </Item>
         <Item option="-empty">
-<Label xml:lang="en">Empty Trashcan</Label>
-<Label xml:lang="es">Vaciar Papelera</Label>
-</Item>
-  </AppMenu>
+            <Label xml:lang="en">Empty Trashcan</Label>
+            <Label xml:lang="es">Vaciar Papelera</Label>
+        </Item>
+    </AppMenu>
 </AppInfo>
