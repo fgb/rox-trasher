@@ -6,7 +6,8 @@
 #### Initialization
 
 # Determine the path of the script
-cd "`dirname "$0"`"
+APPDIR=`dirname "$0"`
+cd "$APPDIR"
 APPDIR="`pwd`"
 
 # Variables
@@ -63,7 +64,7 @@ case $LANG in
     msg17="Hay uno o más accesos directos en el panel apuntando a"
     msg18="Esto moverá el elemento original al cesto de basura y borrará los accesos directos del panel.\n\n¿Desea continuar?"
     msg19="ROX-Trasher 0.5.1\nFernando Garcia Bermudez - Gabriel Rojas"
-    appinfo1="Eliminación"
+    appinfo1="Eliminacion"
     appinfo2="Origen"
     appinfo3="Tipo"
     appinfo4="Restaurar"
@@ -83,7 +84,7 @@ fi
 # Show the splash screen the first time the program runs
 if test -e "$APPDIR/.first_use"; then
     zenity --info --text="$msg19"
-    "$APPDIR/trash-icon empty"
+    "$APPDIR/trash-icon" empty
     rm "$APPDIR/.first_use"
 fi
 

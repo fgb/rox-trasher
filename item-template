@@ -5,7 +5,8 @@
 #### Initialization
 
 # Determine the path of the script
-cd `dirname "$0"`
+APPDIR=`dirname "$0"`
+cd "$APPDIR"
 APPDIR="`pwd`"
 
 #####	TRANSLATIONS
@@ -149,8 +150,12 @@ elif [ "$1" = "-delete" ]; then
     # If they chose to cancel.
     [ $? -eq 0 ] || exit
 
+    # BUG FIX: items with space on their names
+    processFileName "$APPDIR"
+    file2=${FileName//' '/%}
+
     # Remove the restore-all file info.
-    rm "TRASH/.restore-all/restore-FILE"
+    rm "TRASH/.restore-all/restore-$file2"
 
     stuff="`ls STORE`"
 

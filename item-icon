@@ -3,7 +3,8 @@
 # March, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
 
 # Determine the path of the script
-cd `dirname "$0"`
+APPDIR=`dirname "$0"`
+cd "$APPDIR"
 APPDIR="`pwd`"
 
 if  [ "$XDG_DATA_DIRS" = "" ]; then
