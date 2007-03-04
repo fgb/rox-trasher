@@ -1,11 +1,11 @@
 #!/bin/bash
 # March, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
 
-# Determine the path to this application.
-APPDIR=`dirname "$0"`
-cd "$APPDIR"
-APPDIR="`pwd`"
-actual=`date +"%Y-%m-%dT%T"`
+# Determine the path where the application was installed
+cd `dirname "$0"`
+APPDIR = `pwd`
+
+datetime=`date +"%Y-%m-%dT%T"`
 
 #################################################
 #################################################
@@ -175,7 +175,7 @@ fi
 # Create the info file
 echo "[Trash Info]
 Path=$m
-DeletionDate=$actual" > "$trash/info/$FileName-$$.trashinfo"
+DeletionDate=$datetime" > "$trash/info/$FileName-$$.trashinfo"
 
 
 # move the item to the files Trash directory.
@@ -196,10 +196,10 @@ fi
 filetype=${filetype/_/-}
 echo "<?xml version=\"1.0\"?>
 <AppInfo>
-  <Summary>$filetype - $appinfo1 $actual - $appinfo2 $m</Summary>
+  <Summary>$filetype - $appinfo1 $datetime - $appinfo2 $m</Summary>
   <About>
     <$appinfo3>$filetype</$appinfo3>
-    <$appinfo4>$actual</$appinfo4>
+    <$appinfo4>$datetime</$appinfo4>
     <$appinfo5>$m</$appinfo5>
   </About>
    <AppMenu>
