@@ -1,0 +1,1 @@
+- 12/03/07 : Replaced gtk-theme-name for gtk-icon-theme-name in item-icon and trash-icons to adapt to the latest versions of gtk2
