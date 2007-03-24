@@ -107,13 +107,22 @@ fi
 
 [ -d "$interface" ] || mkdir -p "$interface"
 
-# Set the fucking icon
-stock=`ls "$interface"`
-if [ "$stock" = "" ];then
-    "$APPDIR/trash-icon" empty
-else
-    "$APPDIR/trash-icon" full
-fi
+
+# Set icon (Fernando)
+if test -e "$APPDIR/.DirIcon"; then
+     zenity --info --text="$msg19"
+     "$APPDIR/trash-icon" empty
+    rm "$APPDIR/.first_use"
+ fi
+
+
+# Set the fucking icon (Gabriel)
+# stock=`ls "$interface"`
+# if [ "$stock" = "" ];then
+#    "$APPDIR/trash-icon" empty
+# else
+#    "$APPDIR/trash-icon" full
+# fi
 
 ############################################################
 #### Functions
