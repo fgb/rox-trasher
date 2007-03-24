@@ -1,5 +1,5 @@
 #!/bin/bash
-# ROX-Trasher: Trashcan icon script
+# ROX-Trasher: Trashcan icon script - STILL BUGGY
 # March, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
 
 # Determine the path of the script
@@ -7,17 +7,38 @@ APPDIR=`dirname "$0"`
 cd "$APPDIR"
 APPDIR="`pwd`"
 
-if test -e "$HOME/.gtkrc-2.0"; then
-theme=`grep gtk-icon-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-icon-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-if  [ "$theme" = "" ];then
+if  [ "$XDG_DATA_DIRS" = "" ]; then
+    XDG_DATA_DIRS="/usr/share"
+fi
+
+######### FUNCTIONS ##########
+##############################
+
+function fallback {
+
+# Set the fallback icon theme
 theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
 theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-fi
+
+}
+
+
+function set_theme {
+
+# Check the ROX theme
+if [ -e "$HOME/.config/rox.sourceforge.net/ROX-Filer/Options" ]; then
+theme=`grep "icon_theme" "$HOME/.config/rox.sourceforge.net/ROX-Filer/Options" | sed -e s/'<Option name=\"icon_theme\">'// -e s/'<\/Option>'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
 else
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+# If not exists, use the gtk fallback theme
+fallback
 fi
+}
+
+## END OF FUNCTIONS ##########
+##############################
+
+set_theme
 
 if test -e "$HOME/.icons"; then
 
@@ -58,10 +79,6 @@ fi
 fi
 
 if [ ! -e "$empty_icon" ] || [ ! -e "$full_icon" ]; then
-
-if  [ "$XDG_DATA_DIRS" = "" ]; then
-    XDG_DATA_DIRS="/usr/share"
-fi
 
 if test -e "$XDG_DATA_DIRS/icons/$theme/scalable"; then
 
@@ -260,3 +277,6 @@ rox -x "$APPDIR"
 fi
 
 exit
+
+
+

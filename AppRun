@@ -34,7 +34,6 @@ msg15="There's one or more shortcuts on the desktop pointing to"
 msg16="\nThis will move the original item to the trash can and remove the shortcuts from the desktop.\n\nDo you want to continue?"
 msg17="There's one or more shortcuts on the panel pointing to"
 msg18="\nThis will move the original item to the trash can and remove the shortcuts from the panel.\n\nDo you want to continue?"
-msg19="ROX-Trasher 0.5.1\nFernando Garcia Bermudez - Gabriel Rojas"
 appinfo1="Deletion"
 appinfo2="Origin"
 appinfo3="Type"
@@ -63,7 +62,6 @@ case $LANG in
     msg16="\nEsto moverá el elemento original al cesto de basura y borrará los accesos directos del escritorio.\n\n¿Desea continuar?"
     msg17="Hay uno o más accesos directos en el panel apuntando a"
     msg18="Esto moverá el elemento original al cesto de basura y borrará los accesos directos del panel.\n\n¿Desea continuar?"
-    msg19="ROX-Trasher 0.5.1\nFernando Garcia Bermudez - Gabriel Rojas"
     appinfo1="Eliminacion"
     appinfo2="Origen"
     appinfo3="Tipo"
@@ -81,11 +79,14 @@ if !which zenity &> /dev/null; then
     exit
 fi
 
+<<<<<<< .mine
+=======
 # Show the splash screen and create the .DirIcon the first time the program runs
 if test -e "$APPDIR/.DirIcon"; then
     zenity --info --text="$msg19"
     "$APPDIR/trash-icon" empty
 fi
+>>>>>>> .r44
 
 # Create the Trash directory if it doesn't already exist.
 if  [ "$XDG_DATA_HOME" != "" ]; then
@@ -105,6 +106,14 @@ else
 fi
 
 [ -d "$interface" ] || mkdir -p "$interface"
+
+# Set the fucking icon
+stock=`ls "$interface"`
+if [ "$stock" = "" ];then
+    "$APPDIR/trash-icon" empty
+else
+    "$APPDIR/trash-icon" full
+fi
 
 ############################################################
 #### Functions
@@ -146,6 +155,9 @@ function processFileName {
 # Move item to the trash can
 function MoveToTrash {
 
+    # BUG FIX: Set the file type before moving the item
+    puretype=`rox -m "$m"`
+
     processFileName "$m"
 
     # Create the info file in the info directory
@@ -158,7 +170,7 @@ function MoveToTrash {
     if [ -x "$trash/files/$FileName-$$/AppRun" ]; then
         filetype="rox-application"
     else
-        filetype=`rox -m "$trash/files/$FileName-$$"`
+        filetype="$puretype"
         filetype=${filetype/\//_}
     fi
 
@@ -246,6 +258,8 @@ function RemoveOldRoxIcon_Panel {
         done
     fi
 }
+
+"$APPDIR/other-trashcans" "$APPDIR" "$trash" "$interface" "$appinfo1" "$datetime" "$appinfo2" "$appinfo3" "$appinfo4" "$appinfo5"
 
 ############################################################
 #### Arguments Parsing

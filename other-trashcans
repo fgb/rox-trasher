@@ -1,0 +1,151 @@
+#!/bin/bash
+# ROX-Trasher: Other-trashcans script
+# March, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
+
+# Variables
+APPDIR="$1"
+trash="$2"
+interface="$3"
+appinfo1="$4"
+datetime="$5"
+appinfo2="$6"
+appinfo3="$7"
+appinfo4="$8"
+appinfo5="$9"
+
+###### FUNCTIONS #######
+########################
+
+# Find the name of the item
+function notAForwardSlash {
+    fSlash=/
+    
+    if [[ $1 != $fSlash ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+function processFileName {
+    STRING=$1
+    LENGTH=${#STRING}
+
+    for ((n=0;n <= $LENGTH; n++)); do
+        CHAR=${STRING:$n:1}
+        
+        if notAForwardSlash $CHAR; then
+            FileName=$FileName$CHAR
+        else
+            FileName=""
+        fi
+    done
+    
+    # Add a suffix if the item is hidden
+    FileName="${FileName/#./$msg2}"
+    
+    # Create directory for the trashed item.
+    if test ! -e "$interface/$FileName-$$"; then
+        mkdir "$interface/$FileName-$$"
+    fi
+}
+
+
+# Move item to the trash can
+function MoveToTrashOtherFiles {
+
+    # BUG FIX: Set the file type before moving the item
+    puretype=`rox -m "$file"`
+
+    processFileName "$file"
+
+    # Rename the file
+    mv "$trash/files/$file" "$trash/files/$FileName-$$"
+
+    # Rename the info file
+    mv "$trash/info/$file.trashinfo" "$trash/info/$FileName-$$.trashinfo"
+
+
+    file_origin=`grep Path "$trash/info/$FileName-$$.trashinfo" | sed -e s/'Path='//`
+
+    # Set the trashed item type
+    if [ -x "$trash/files/$FileName-$$/AppRun" ]; then
+        filetype="rox-application"
+    else
+        filetype="$puretype"
+        filetype=${filetype/\//_}
+    fi
+
+    # Create the trashed item icon
+    "$APPDIR/item-icon" "$interface" "$FileName-$$" "$filetype" "$trash"
+
+    # Create the trashed item AppInfo file
+    filetype=${filetype/_/-}
+    echo "<?xml version=\"1.0\"?>
+<AppInfo>
+    <Summary>$filetype - $appinfo1: $datetime - $appinfo2: $file_origin</Summary>
+    <About>
+        <$appinfo3>$filetype</$appinfo3>
+        <$appinfo1>$datetime</$appinfo1>
+        <$appinfo2>$file_origin</$appinfo2>
+    </About>
+    <AppMenu>
+        <Item label=\"$appinfo4\" option=\"-restore\"/>
+        <Item label=\"$appinfo5\" option=\"-delete\"/>
+    </AppMenu>
+</AppInfo>" > "$interface/$FileName-$$/AppInfo.xml"
+
+
+    # Write the trashed item AppRun file
+    gawk -v var="PATH" -v name="$file_origin" -v trash="$APPDIR" -v xdg="$trash" -v store="$interface" -v file="$FileName-$$"   '{sub(var, name)}
+{sub("TRASH", trash)}
+{sub("XDG", xdg)}
+{sub("STORE", store)}
+{sub("FILE", file)}
+{sub("TRASH", trash); print}' "$APPDIR/item-template" > "$interface/$FileName-$$/AppRun"
+
+    # Update the .restore-all directory
+    if test ! -e "$APPDIR/.restore-all" ; then
+        mkdir "$APPDIR/.restore-all"
+    fi
+
+    echo -e "#!/bin/bash\ncd \"$interface/$FileName-$$\"\n./AppRun -restore\nexit" > "$APPDIR/.restore-all/restore-$FileName-$$"
+
+    # Bestow the necessary permissions on executables
+    chmod 777 "$interface/$FileName-$$/AppRun"
+    chmod 777 "$APPDIR/.restore-all/restore-$FileName-$$"
+
+    # BUG FIX: Items with spaces on their names
+    FileName2=${FileName//' '/%}
+
+    if [ "$FileName" != "$FileName2" ]; then 
+        mv "$APPDIR/.restore-all/restore-$FileName-$$" "$APPDIR/.restore-all/restore-$FileName2-$$"
+    fi
+}
+####################################
+
+comp1=`ls -1 $HOME/.local/share/Trash/files`
+comp2=`ls -1 $HOME/.config/ROX-Trasher`
+
+ if [ "$comp1" != "$comp2" ]; then 
+
+    if [ "$comp2" != "" ]; then
+
+     diff=`echo "$comp1" | grep -v "$comp2"`
+
+     for file in "$diff"
+     do
+     MoveToTrashOtherFiles "$file"
+     done
+
+    else
+
+       cd "$HOME/.local/share/Trash/files"
+
+       for file in *
+       do
+       MoveToTrashOtherFiles "$file"
+       done
+
+ fi
+     fi

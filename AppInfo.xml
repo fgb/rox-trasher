@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <AppInfo>
-    <Summary>ROX-Trasher</Summary>
+    <Summary xml:lang="en">Trashcan</Summary>
+    <Summary xml:lang="es">Cesto de Basura</Summary>
     <About xml:lang="en">
+        <Name>ROX-Trasher</Name>
         <Purpose>Trashcan application for the ROX Filer and Desktop</Purpose>
         <License>GPL: http://www.gnu.org/licenses/gpl.txt</License>
         <Version>0.5.1-dev - March, 2007</Version>
@@ -9,11 +11,12 @@
         <Homepage>http://code.google.com/p/rox-trasher/</Homepage>
     </About>
     <About xml:lang="es">
+        <Name label="Nombre"></Name>
         <Purpose label="Proposito">Cesto de basura para ROX Filer y Desktop</Purpose>
-        <License label="Licencia">GPL: http://www.gnu.org/licenses/gpl.txt</License>
+        <License label="Licencia"></License>
         <Version>0.5.1-dev - Marzo, 2007</Version>
-        <Authors label="Autores">Gabriel Rojas - Fernando Garcia Bermudez</Authors>
-        <Homepage label="Pagina Web">http://code.google.com/p/rox-trasher/</Homepage>
+        <Authors label="Autores"></Authors>
+        <Homepage label="Pagina Web"></Homepage>
     </About>
     <AppMenu>
         <Item option="-restore-all">

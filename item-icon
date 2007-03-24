@@ -1,5 +1,5 @@
 #!/bin/bash
-# ROX-Trasher: Trashed item icon script
+# ROX-Trasher: Trashed item icon script - STILL BUGGY
 # March, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
 
 # Determine the path of the script
@@ -11,17 +11,34 @@ if  [ "$XDG_DATA_DIRS" = "" ]; then
     XDG_DATA_DIRS="/usr/share"
 fi
 
-if test -e "$HOME/.gtkrc-2.0"; then
-theme=`grep gtk-icon-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-icon-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-if  [ "$theme" = "" ];then
+######### FUNCTIONS ##########
+##############################
+
+function fallback {
+
+# Set the fallback icon theme
 theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
 theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-fi
+
+}
+
+
+function set_theme {
+
+# Check the ROX theme
+if [ -e "$HOME/.config/rox.sourceforge.net/ROX-Filer/Options" ]; then
+theme=`grep "icon_theme" "$HOME/.config/rox.sourceforge.net/ROX-Filer/Options" | sed -e s/'<Option name=\"icon_theme\">'// -e s/'<\/Option>'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
 else
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+# If not exists, use the gtk fallback theme
+fallback
 fi
+}
+
+## END OF FUNCTIONS ##########
+##############################
+
+set_theme
 
 trash_icon=`find "$HOME/.config/rox.sourceforge.net/MIME-icons" -name $3.png`
 
@@ -29,6 +46,18 @@ if [ "$trash_icon" = "" ];then
 
 type=${3/_/-}
 
+# If theme is ROX, check in the default icon dir
+if [ "$theme" = "ROX" ]; then
+
+icon_dir="$HOME/.icons/ROX/MIME"
+
+type=${3/_/:}
+
+trash_icon="$icon_dir/mime-$type.png"
+
+else
+
+# If not, check in the rest of directories
 if test -e "$HOME/.icons/$theme/scalable/filesystems"; then
 
 gnome=`find "$HOME/.icons/$theme/scalable/filesystems" -name gnome*`
@@ -246,8 +275,7 @@ fi
 
 if test ! -e "$trash_icon"; then
 
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fallback
 
 if test -e "$HOME/.icons/$theme/scalable/mimetypes"; then
 
@@ -281,8 +309,7 @@ fi
 
 if test ! -e "$trash_icon"; then
 
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fallback
 
 if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/mimetypes"; then
 
@@ -316,8 +343,7 @@ fi
 
 if test ! -e "$trash_icon"; then
 
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+fallback
 
 if test -e "/usr/share/pixmaps/$theme/scalable/mimetypes"; then
 
@@ -350,17 +376,8 @@ fi
 fi
 
 if test ! -e "$trash_icon"; then
-if test -e "$HOME/.gtkrc-2.0"; then
-theme=`grep gtk-icon-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-icon-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-if  [ "$theme" = "" ];then
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-fi
-else
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-fi
+set_theme
+
 
 if test -e "$HOME/.icons/$theme/scalable/filesystems"; then
 
@@ -393,17 +410,8 @@ fi
 fi
 
 if test ! -e "$trash_icon"; then
-if test -e "$HOME/.gtkrc-2.0"; then
-theme=`grep gtk-icon-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-icon-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-if  [ "$theme" = "" ];then
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-fi
-else
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-fi
+set_theme
+
 
 if test -e "$XDG_DATA_DIRS/icons/$theme/scalable/filesystems"; then
 
@@ -437,17 +445,8 @@ fi
 fi
 fi
 if test ! -e "$trash_icon"; then
-if test -e "$HOME/.gtkrc-2.0"; then
-theme=`grep gtk-icon-theme-name $HOME/.gtkrc-2.0 | sed -e s/'gtk-icon-theme-name'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-if  [ "$theme" = "" ];then
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-fi
-else
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-fi
+set_theme
+
 
 if test -e "/usr/share/pixmaps/icons/$theme/scalable/filesystems"; then
 
@@ -582,7 +581,7 @@ fi
 fi
 fi
 fi
-
+fi
 # Link the icon for the trashed item.
 ln -sf "$trash_icon" "$1/$2/.DirIcon"
 
