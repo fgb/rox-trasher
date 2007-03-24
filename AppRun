@@ -79,15 +79,6 @@ if !which zenity &> /dev/null; then
     exit
 fi
 
-<<<<<<< .mine
-=======
-# Show the splash screen and create the .DirIcon the first time the program runs
-if test -e "$APPDIR/.DirIcon"; then
-    zenity --info --text="$msg19"
-    "$APPDIR/trash-icon" empty
-fi
->>>>>>> .r44
-
 # Create the Trash directory if it doesn't already exist.
 if  [ "$XDG_DATA_HOME" != "" ]; then
     trash="$XDG_DATA_HOME/Trash"
