@@ -82,10 +82,9 @@ if !which zenity &> /dev/null; then
 fi
 
 # Show the splash screen and create the .DirIcon the first time the program runs
-if test -e "$APPDIR/.first_use"; then
+if test -e "$APPDIR/.DirIcon"; then
     zenity --info --text="$msg19"
     "$APPDIR/trash-icon" empty
-    rm "$APPDIR/.first_use"
 fi
 
 # Create the Trash directory if it doesn't already exist.
