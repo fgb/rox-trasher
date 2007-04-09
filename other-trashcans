@@ -58,6 +58,8 @@ function MoveToTrashOtherFiles {
     puretype=`rox -m "$file"`
 
     processFileName "$file"
+    fixname=`basename "$file"`
+    newfixname=${file//$fixname/''}
 
     # Rename the file
     mv "$trash/files/$file" "$trash/files/$FileName-$$"
@@ -97,10 +99,11 @@ function MoveToTrashOtherFiles {
 
 
     # Write the trashed item AppRun file
-    gawk -v var="PATH" -v name="$file_origin" -v trash="$APPDIR" -v xdg="$trash" -v store="$interface" -v file="$FileName-$$"   '{sub(var, name)}
+    gawk -v var="PATH" -v name="$file_origin" -v trash="$APPDIR" -v xdg="$trash" -v store="$interface" -v file="$FileName-$$" -v fix="$newfixname"  '{sub(var, name)}
 {sub("TRASH", trash)}
 {sub("XDG", xdg)}
 {sub("STORE", store)}
+{sub("FIX", fix)}
 {sub("FILE", file)}
 {sub("TRASH", trash); print}' "$APPDIR/item-template" > "$interface/$FileName-$$/AppRun"
 

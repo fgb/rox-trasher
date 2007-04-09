@@ -14,24 +14,15 @@ fi
 ######### FUNCTIONS ##########
 ##############################
 
-function fallback {
-
-# Set the fallback icon theme
-theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-
-}
-
-
 function set_theme {
 
 # Check the ROX theme
 if [ -e "$HOME/.config/rox.sourceforge.net/ROX-Filer/Options" ]; then
-theme=`grep "icon_theme" "$HOME/.config/rox.sourceforge.net/ROX-Filer/Options" | sed -e s/'<Option name=\"icon_theme\">'// -e s/'<\/Option>'//`
-theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
-else
-# If not exists, use the gtk fallback theme
-fallback
+	theme=`grep "icon_theme" "$HOME/.config/rox.sourceforge.net/ROX-Filer/Options" | sed -e s/'<Option name=\"icon_theme\">'// -e s/'<\/Option>'//`
+	theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+	else
+# If not exists, use the ROX fallback theme
+	theme="ROX"
 fi
 }
 
@@ -88,6 +79,8 @@ trash_icon="$HOME/.icons/$theme/48x48/filesystems/fs-directory.png"
 fi
 fi
 fi
+
+# THIS NEED A BIG FAT DEPURATION!!!
 
 if [ "$trash_icon" = "" ];then 
 

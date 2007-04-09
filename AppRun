@@ -100,20 +100,20 @@ fi
 
 
 # Set icon (Fernando)
-if test -e "$APPDIR/.DirIcon"; then
-     zenity --info --text="$msg19"
-     "$APPDIR/trash-icon" empty
-    rm "$APPDIR/.first_use"
- fi
+#if test -e "$APPDIR/.DirIcon"; then
+#     zenity --info --text="$msg19"
+#     "$APPDIR/trash-icon" empty
+#    rm "$APPDIR/.first_use"
+# fi
 
 
 # Set the fucking icon (Gabriel)
-# stock=`ls "$interface"`
-# if [ "$stock" = "" ];then
-#    "$APPDIR/trash-icon" empty
-# else
-#    "$APPDIR/trash-icon" full
-# fi
+ stock=`ls "$interface"`
+ if [ "$stock" = "" ];then
+    "$APPDIR/trash-icon" empty
+ else
+    "$APPDIR/trash-icon" full
+ fi
 
 ############################################################
 #### Functions
@@ -159,6 +159,8 @@ function MoveToTrash {
     puretype=`rox -m "$m"`
 
     processFileName "$m"
+    fixname=`basename "$m"`
+    newfixname=${m//$fixname/''}
 
     # Create the info file in the info directory
     echo -e "[Trash Info]\nPath=$m\nDeletionDate=$datetime" > "$trash/info/$FileName-$$.trashinfo"
@@ -195,11 +197,12 @@ function MoveToTrash {
 
 
     # Write the trashed item AppRun file
-    gawk -v var="PATH" -v name="$m" -v trash="$APPDIR" -v xdg="$trash" -v store="$interface" -v file="$FileName-$$"   '{sub(var, name)}
+    gawk -v var="PATH" -v name="$m" -v trash="$APPDIR" -v xdg="$trash" -v store="$interface" -v file="$FileName-$$" -v fix="$newfixname"  '{sub(var, name)}
 {sub("TRASH", trash)}
 {sub("XDG", xdg)}
 {sub("STORE", store)}
 {sub("FILE", file)}
+{sub("FIX", fix)}
 {sub("TRASH", trash); print}' "$APPDIR/item-template" > "$interface/$FileName-$$/AppRun"
 
     # Update the .restore-all directory
@@ -258,8 +261,8 @@ function RemoveOldRoxIcon_Panel {
         done
     fi
 }
-
-"$APPDIR/other-trashcans" "$APPDIR" "$trash" "$interface" "$appinfo1" "$datetime" "$appinfo2" "$appinfo3" "$appinfo4" "$appinfo5"
+# Not implemented yet
+# "$APPDIR/other-trashcans" "$APPDIR" "$trash" "$interface" "$appinfo1" "$datetime" "$appinfo2" "$appinfo3" "$appinfo4" "$appinfo5"
 
 ############################################################
 #### Arguments Parsing

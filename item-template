@@ -3,7 +3,6 @@
 # March, 2007 - Gabriel Rojas - Fernando Garcia Bermudez
 
 #### Initialization
-
 # Determine the path of the script
 APPDIR=`dirname "$0"`
 cd "$APPDIR"
@@ -58,7 +57,10 @@ processFileName "PATH"
 
 function RestoreItem {
 
-    # Restore the item.
+    if test ! -e "FIX";then
+    	mkdir -p "FIX"
+    fi
+        # Restore the item.
     mv "XDG/files/FILE" "PATH"
 
     # Get info from the pinboard shortcut file (if exists)
