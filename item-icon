@@ -14,6 +14,14 @@ fi
 ######### FUNCTIONS ##########
 ##############################
 
+function fallback {
+
+# Set the fallback icon theme
+theme=`grep gtk-fallback-icon-theme /etc/gtk-2.0/gtkrc | sed -e s/'gtk-fallback-icon-theme'// -e s/' '// -e s/'='// -e s/'"'// -e s/'"'//`
+theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
+
+}
+
 function set_theme {
 
 # Check the ROX theme
@@ -22,7 +30,7 @@ if [ -e "$HOME/.config/rox.sourceforge.net/ROX-Filer/Options" ]; then
 	theme=`expr "$theme" : '[[:space:]]*\(.*\)[[:space:]]*$'`
 	else
 # If not exists, use the ROX fallback theme
-	theme="ROX"
+fallback
 fi
 }
 
