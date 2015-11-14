@@ -1,6 +1,6 @@
-			ROX-Trasher
-			Trashcan application for the ROX Filer and Desktop
-			by Gabriel Rojas & Fernando Garcia Bermudez
+**ROX-Trasher**
+Trashcan application for the ROX Filer and Desktop
+by Gabriel Rojas & Fernando Garcia Bermudez
 
 
 BRIEF
