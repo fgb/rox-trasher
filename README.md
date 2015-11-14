@@ -1,10 +1,11 @@
-**ROX-Trasher**
+#### ROX-Trasher
+
 Trashcan application for the ROX Filer and Desktop
+
 by Gabriel Rojas & Fernando Garcia Bermudez
 
 
-BRIEF
------
+##### BRIEF
 
 A modified version of the trashcan application written for Puppy Linux by Dan Van Wormer. It was adapted to be non-distribution and non-user specific and updated to the latest version of [ROX-Filer](http://rox.sourceforge.net/desktop/).
 
@@ -13,28 +14,27 @@ It is undergoing substantial development in order to make it adhere to the [free
 Apart from the common requirements of this specification, we are working on an undo function to ease the recovery of mistakingly trashed items and towards a better integration into ROX filer and its desktop (hopefully, getting it included into the ROX trunk in the near future).
 
 
-NEWS FOR THIS VERSION
----------------------
+##### NEWS FOR THIS VERSION
 
 [ChangeLog](Changes)
 
-LICENSE
--------
+
+##### LICENSE
 
 [GNU GPL v2](COPYING)
 
-REQUERIMENTS
-------------
+
+##### REQUERIMENTS
 
 zenity >= 2.12.1
 
-INSTALLATION
-------------
+
+##### INSTALLATION
 
 Simply extract "ROX-Trasher-xx.tar.bz2".
 
-OPERATIONS
-----------
+
+##### OPERATIONS
 
 When you first click on the trash icon it will create (if it does not already exist) the $XDG_CONFIG_HOME/ROX-Trasher  directory.
 
@@ -55,33 +55,30 @@ To empty the trash right click on the desktop icon and select "Empty Trashcan". 
 You will get a prompt if you send a symbolic link to the Trash. This is just to let you know that you are not sending the original item to the Trash.
 
 
-TRANSLATIONS HOW-TO
--------------------
+##### TRANSLATIONS HOW-TO
 
 Check the "TRANSLATIONS" section in the AppRund and item-template files, redefine the variable strings, and add in the case loop the generic $LANG code (for example, for es_ES: es* ). You can also have to translate the AppInfo.xml file in the $APPDIR directory, check the Chapter 17 in the ROX-Filer manual.
 If you add some translations for your own, please send us with the proper $LANG code and the translated AppInfo file to add to the next version of the app.
 
 
-FUTURE
-------
+##### FUTURE
 
 - The posibility to add in Rox-Filer to be oficial part of the program.
 - If the up item is posible, a item menu in Rox-Filer: "Send to Trash".
 
-CONDITIONS
-----------
+
+##### CONDITIONS
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program; if not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-CONTACT
--------
+
+##### CONTACT
 
 Help? Bugs? Suggestions? Opinions? ----------> achaw.ar@gmail.com
 
 
-TESTERS
--------
+##### TESTERS
 
 David Arthur (dave@kouya.ne)
