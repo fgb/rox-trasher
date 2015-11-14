@@ -6,9 +6,9 @@
 BRIEF
 -----
 
-A modified version of the trashcan application written for Puppy Linux by Dan Van Wormer. It was adapted to be non-distribution and non-user specific and updated to the latest version of ROX-Filer.
+A modified version of the trashcan application written for Puppy Linux by Dan Van Wormer. It was adapted to be non-distribution and non-user specific and updated to the latest version of [ROX-Filer](http://rox.sourceforge.net/desktop/).
 
-It is undergoing substantial development in order to make it adhere to the freedesktop.org 'Desktop Trash Can Specification' and related specifications.
+It is undergoing substantial development in order to make it adhere to the [freedesktop.org Desktop Trash Can Specification](https://wiki.freedesktop.org/www/Specifications/trash-spec/) and related specifications.
 
 Apart from the common requirements of this specification, we are working on an undo function to ease the recovery of mistakingly trashed items and towards a better integration into ROX filer and its desktop (hopefully, getting it included into the ROX trunk in the near future).
 
@@ -16,12 +16,12 @@ Apart from the common requirements of this specification, we are working on an u
 NEWS FOR THIS VERSION
 ---------------------
 
-See "Changes".
+[ChangeLog](Changes)
 
 LICENSE
 -------
 
-GPL (See "COPYING").
+[GNU GPL v2](COPYING)
 
 REQUERIMENTS
 ------------
@@ -38,7 +38,7 @@ OPERATIONS
 
 When you first click on the trash icon it will create (if it does not already exist) the $XDG_CONFIG_HOME/ROX-Trasher  directory.
 
-Clicking on the desktop icon will open up the  $XDG_CONFIG_HOME/ROX-Trasher directory. 
+Clicking on the desktop icon will open up the  $XDG_CONFIG_HOME/ROX-Trasher directory.
 
 Once the Trash is open you can right click on a "Trashed" item and select "Restore". This will copy the original file or directory back to its original location. If another item with the same name is in that location it will prompt you before it over-writes it. Also, you can choose delete the item, but USE THE CONTEXTUAL MENU OF THE APP, NOT THE DELETE OPERATION OF ROX-FILER!!!.
 
@@ -46,7 +46,7 @@ Dragging and dropping a file or directory into the Trash desktop icon will move 
 
 Files and directories will have a unique number appended to the end of their names. This prevents new trashed items with the same names form over writing the old files.
 
-Right-clicking on a file or directory and selecting "Send To - Trash" will have the same effect as dragging and dropping the file on the desktop icon. 
+Right-clicking on a file or directory and selecting "Send To - Trash" will have the same effect as dragging and dropping the file on the desktop icon.
 
 To restore all items, right click on the desktop icon and select "Restore all". The trashcan will restore all items stored in the trash directory and shows a info dialog with the names of the restored items. If the item have a pinboard or panel shortcut it will be restored too.
 
