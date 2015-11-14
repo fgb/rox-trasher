@@ -27,7 +27,7 @@ msg8="Move to the trash can"
 msg9="Delete this item(s)?"
 msg10="You don't have sufficient permissions to move"
 msg11="to the trash can."
-msg12="\n\nDo you still want to delete the item(s)?" 
+msg12="\n\nDo you still want to delete the item(s)?"
 msg13="The item"
 msg14="is a symbolic link.\nThis will move the link to the trash can and leave the original item alone.\n\nDo you want to continue?"
 msg15="There's one or more shortcuts on the desktop pointing to"
@@ -44,29 +44,58 @@ case $LANG in
 
     # Español
     es* )
-    msg1="Zenity no esta instalado y necesitarías una versión >= 2.12.1 para poder mostrar los dialogos en pantalla."
-    msg2="OCULTO-"
-    msg3="¡El cesto de basura ya esta vacio!"
-    msg4="Vaciar el cesto de basura"
-    msg5="¿Eliminar todos los elementos del cesto de basura?\n\nNota: ¡¡¡Esto no puede deshacerse!!!"
-    msg6="¡El cesto de basura esta vacio!"
-    msg7="¿Restaurar TODOS los elementos del cesto de basura?"
-    msg8="Mover al cesto de basura"
-    msg9="¿Borrar este elemento(s)?"
-    msg10="No tiene los permisos suficientes para mover"
-    msg11="al cesto de basura."
-    msg12="\n\n¿Todavia quieres eliminarlo(s)?" 
-    msg13="El item"
-    msg14="es un enlace simbólico.\nEsto moverá el enlace al cesto de basura y no tocará al elemento original.\n\n¿Desea continuar?"
-    msg15="Hay uno o más accesos directos en el escritorio apuntando a"
-    msg16="\nEsto moverá el elemento original al cesto de basura y borrará los accesos directos del escritorio.\n\n¿Desea continuar?"
-    msg17="Hay uno o más accesos directos en el panel apuntando a"
-    msg18="Esto moverá el elemento original al cesto de basura y borrará los accesos directos del panel.\n\n¿Desea continuar?"
-    appinfo1="Eliminacion"
-    appinfo2="Origen"
-    appinfo3="Tipo"
-    appinfo4="Restaurar"
-    appinfo5="Borrar"
+	msg1="Zenity no está instalado y necesitará una versión >= 2.12.1 para poder mostrar los dialogos en pantalla."
+	msg2="OCULTO-"
+	msg3="¡El cesto de basura ya está vacio!"
+	msg4="Vaciar el cesto de la basura"
+	msg5="¿Eliminar todos los elementos del cesto de la basura?\n\nNota: ¡¡¡Esto no puede deshacerse!!!"
+	msg6="¡El cesto de la basura está vacio!"
+	msg7="¿Restaurar TODOS los elementos del cesto de basura?"
+	msg8="Mover al cesto de la basura"
+	msg9="¿Borrar este(os) elemento(s)?"
+	msg10="No tiene los permisos suficientes para mover"
+	msg11="al cesto de la basura."
+	msg12="\n\n¿Todavia quiere eliminarlo(s)?"
+	msg13="El elemento"
+	msg14="es un enlace simbólico.\nEsto moverá el enlace al cesto de la basura y no afectará al elemento original.\n\n¿Desea continuar?"
+	msg15="Hay uno o más accesos directos en el escritorio apuntando a"
+	msg16="\nEsto moverá el elemento original al cesto de la basura y borrará los accesos directos del escritorio.\n\n¿Desea continuar?"
+	msg17="Hay uno o más accesos directos en el panel apuntando a"
+	msg18="Esto moverá el elemento original al cesto de la basura y borrará los accesos directos del panel.\n\n¿Desea continuar?"
+	appinfo1="Eliminación"
+	appinfo2="Origen"
+	appinfo3="Tipo"
+	appinfo4="Restaurar"
+	appinfo5="Borrar"
+    ;;
+
+    # Galego
+    gl* )
+	msg1="Zenity non está instalado e precisará unha versión >= 2.12.1 para poder amosar os dialogos en pantalla."
+	msg2="AGOCHADO-"
+	msg3="O cesto do lixo xa está baleiro!"
+	msg4="Vaciar el cesto de basura"
+	msg5="Eliminar todos os elementos do cesto do lixo?\n\nNota: Isto non pode desfacerse!!!"
+	msg6="O cesto do lixo está baleiro!"
+	msg7="Restaurar TODOS os elementos do cesto do lixo?"
+	msg8="Mover ao cesto do lixo"
+	msg9="¿Borrar este(es) elemento(s)?"
+	msg10="Non ten os permisos suficientes para mover"
+	msg11="ao cesto do lixo."
+	msg12="\n\n Aínda quere eliminalo(s)?"
+	msg13="O elemento"
+	msg14="é unha ligazón simbólica.\nIsto moverá a ligazón ao cesto do lixo e non afectará ao elemento orixinal.\n\nDesexa continuar?"
+	msg15="Hay un ou máis accesos directos no escritorio apuntando a"
+	msg16="\nIsto moverá o elemento orixinal ao cesto do lixo e borrará os accesos directos do escritorio.\n\nDesexa continuar?"
+	msg17="Hai un ou máis accesos directos no panel apuntando a"
+	msg18="Isto moverá o elemento orixinal ao cesto do lixo e borrará os accesos directos do panel.\n\nDesexa continuar?"
+	appinfo1="Eliminación"
+	appinfo2="Orixe"
+	appinfo3="Tipo"
+	appinfo4="Restaurar"
+	appinfo5="Borrar"
+    ;;
+
 esac
 
 # Check if zenity is installed
@@ -121,7 +150,7 @@ fi
 # Find the name of the item
 function notAForwardSlash {
     fSlash=/
-    
+
     if [[ $1 != $fSlash ]]; then
         return 0
     else
@@ -135,17 +164,17 @@ function processFileName {
 
     for ((n=0;n <= $LENGTH; n++)); do
         CHAR=${STRING:$n:1}
-        
+
         if notAForwardSlash $CHAR; then
             FileName=$FileName$CHAR
         else
             FileName=""
         fi
     done
-    
+
     # Add a suffix if the item is hidden
     FileName="${FileName/#./$msg2}"
-    
+
     # Create directory for the trashed item.
     if test ! -e "$interface/$FileName-$$"; then
         mkdir "$interface/$FileName-$$"
@@ -219,7 +248,7 @@ function MoveToTrash {
     # BUG FIX: Items with spaces on their names
     FileName2=${FileName//' '/%}
 
-    if [ "$FileName" != "$FileName2" ]; then 
+    if [ "$FileName" != "$FileName2" ]; then
         mv "$APPDIR/.restore-all/restore-$FileName-$$" "$APPDIR/.restore-all/restore-$FileName2-$$"
     fi
 }
@@ -253,7 +282,7 @@ function RemoveOldRoxIcon_Panel {
              gawk -v var="$number" '{sub(var, ""); print}' "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default" > "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default1"
 
              # Rename the new pan_Default file
-             mv "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default1" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default" 
+             mv "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default1" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pan_Default"
 
              # Restart the panel.
              rox -S
@@ -307,7 +336,7 @@ elif [ "$1" = "-restore-all" ]; then
         cd "$APPDIR/.restore-all"
         for restore in `ls`; do `./$restore`; done
     fi
-    
+
 else
 
     # Check to see if they clicked on the application or sent a file or directory to be deleted.
@@ -322,13 +351,13 @@ else
             for m in "$@"; do
 
                 # Check if the item can be deleted (write access).
-                if [ ! -w "$m" ]; then 
+                if [ ! -w "$m" ]; then
                     zenity --error --window-icon="$APPDIR/.DirIcon" --text "$msg10 $m $msg11"
                     continue
                 fi
 
                 # Check if the item can be trashed (read access).
-                if [ ! -r "$m" ]; then 
+                if [ ! -r "$m" ]; then
                     zenity --warning --window-icon="$APPDIR/.DirIcon" --text "$msg10 $m $msg11$msg12"
                     [ $? -eq 0 ] || continue
                 fi
@@ -341,7 +370,7 @@ else
                     # If they chose to cancel.
                     [ $? -eq 0 ] || exit
                 fi
-                
+
                 # Test to see if the item had a link to it on the pinboard.
                 if test -e "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"; then
                     match=`grep ">$m<" "$HOME/.config/rox.sourceforge.net/ROX-Filer/pb_Default"`

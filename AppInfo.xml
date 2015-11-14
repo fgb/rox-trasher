@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <AppInfo>
     <Summary xml:lang="en">Trashcan</Summary>
-    <Summary xml:lang="es">Cesto de Basura</Summary>
+    <Summary xml:lang="es">Cesto de la basura</Summary>
+    <Summary xml:lang="gl">Cesto do lixo</Summary>
     <About xml:lang="en">
         <Name>ROX-Trasher</Name>
         <Purpose>Trashcan application for the ROX Filer and Desktop</Purpose>
@@ -12,20 +13,30 @@
     </About>
     <About xml:lang="es">
         <Name label="Nombre"></Name>
-        <Purpose label="Proposito">Cesto de basura para ROX Filer y Desktop</Purpose>
-        <License label="Licencia"></License>
-        <Version>0.5.1-dev - Marzo, 2007</Version>
-        <Authors label="Autores"></Authors>
-        <Homepage label="Pagina Web"></Homepage>
+        <Purpose label="Propósito">Cesto de basura para ROX Filer y Desktop</Purpose>
+        <License label="Licencia">GPL: http://www.gnu.org/licenses/gpl.txt</License>
+        <Version label="Versión">0.5.1-dev - March, 2007</Version>
+        <Authors label="Autores">Gabriel Rojas - Fernando Garcia Bermudez</Authors>
+        <Homepage label="Página web">http://code.google.com/p/rox-trasher/</Homepage>
+    </About>
+    <About xml:lang="gl">
+        <Name label="Nome"></Name>
+        <Purpose label="Propósito">Cesto de basura para ROX Filer y Desktop</Purpose>
+        <License label="Licenza">GPL: http://www.gnu.org/licenses/gpl.txt</License>
+        <Version label="Versión">0.5.1-dev - March, 2007</Version>
+        <Authors label="Autores">Gabriel Rojas - Fernando Garcia Bermudez</Authors>
+        <Homepage label="Páxina web">http://code.google.com/p/rox-trasher/</Homepage>
     </About>
     <AppMenu>
         <Item option="-restore-all">
             <Label xml:lang="en">Restore All</Label>
             <Label xml:lang="es">Restaurar todo</Label>
+            <Label xml:lang="gl">Restaurar todo</Label>
         </Item>
         <Item option="-empty">
             <Label xml:lang="en">Empty Trashcan</Label>
-            <Label xml:lang="es">Vaciar Papelera</Label>
+            <Label xml:lang="es">Vaciar la papelera</Label>
+            <Label xml:lang="gl">Baleirar o lixo</Label>
         </Item>
     </AppMenu>
 </AppInfo>

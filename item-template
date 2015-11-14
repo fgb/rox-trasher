@@ -19,17 +19,28 @@ msg25="Confirm action"
 case $LANG in
     # Español
     es* )
-        msg21="Un item llamado PATH ya existe.\n¿Deseas sobreescribirlo?"
-        msg22="¿REALMENTE deseas eliminar este item?"
-        msg23="¿Quieres restaurar el item PATH?"
-        msg24="No puedes arrastrar elementos sobre items que se encuentran en la papelera."
-        msg25="Confirmar accion"
+        msg21="Un elemento llamado PATH ya existe.\n¿Desea sobreescribirlo?"
+        msg22="¿REALMENTE desea eliminar este elemento?"
+        msg23="¿Quiere restaurar el elemento PATH?"
+        msg24="No puede arrastrar elementos sobre los que ya se encuentran en la papelera."
+        msg25="Confirmar la acción"
+    ;;
+
+    # Galego
+    gl* )
+        msg21="Un elemento chamado PATH xa existe.\nDesexa sobrescribilo?"
+        msg22="REALMENTE desexa eliminar este elemento?"
+        msg23="Quere restaurar o elemento PATH?"
+        msg24="Non pode arrastrar elementos sobre os que xa se atopan no cesto do lixo."
+        msg25="Confirmar a acción"
+    ;;
+
 esac
 
 # Find the name of the item
 function notAForwardSlash {
     fSlash=/
-    
+
     if [[ $1 != $fSlash ]]; then
         return 0
     else
@@ -91,7 +102,7 @@ EOF
     if [ -e "$APPDIR/shortcut_panel" ]; then
         side=`sed -e 2d "$APPDIR/shortcut_panel"`
         label=`sed -e 1d "$APPDIR/shortcut_panel"`
-    
+
 # Restore the shortcut on the panel
 rox --RPC << EOF
 <?xml version="1.0"?>
